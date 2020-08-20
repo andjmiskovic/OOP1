@@ -12,21 +12,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class MeniTehnicar extends MeniClass {
-
-	/**
-	 * 
-	 */
+public class MenuTechnicial extends MenuClass {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MeniTehnicar frame = new MeniTehnicar();
+					MenuTechnicial frame = new MenuTechnicial();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -34,110 +27,115 @@ public class MeniTehnicar extends MeniClass {
 			}
 		});
 	}
-	
+
 	public void switchPanel(JFrame frame, JPanel noviPanel) {
-		frame.remove(panelKojiSeMenja);
-		frame.add(noviPanel);
+		frame.remove(changingPanel);
+		frame.getContentPane().add(noviPanel);
 		frame.validate();
 	}
 
-	/**
-	 * Create the frame.
-	 */
-	public MeniTehnicar() {		
-		super("Meni: Medicinski Tehničar");
+	public MenuTechnicial() {
+		super("Menu: Medical Technicial");
 		Color myBlue = new Color(6, 56, 74);
-		panelMeni.setLayout(null);
+		panelMenu.setLayout(null);
 		Font myFont = new Font("Tahoma", Font.PLAIN, 20);
-		
-		JPanel panelZahtevi = new JPanel();
-		panelZahtevi.setBackground(Color.WHITE);
-		panelZahtevi.setBounds(0, 230, 323, 60);
-		panelMeni.add(panelZahtevi);
-		panelZahtevi.setLayout(null);
-		
-		JLabel iconZahtevi = new JLabel("");
-		iconZahtevi.setIcon(new ImageIcon(MeniAdministrator.class.getResource("/Interfaces/request.jpg")));
-		iconZahtevi.setBounds(30, 0, 50, 60);
-		panelZahtevi.add(iconZahtevi);
-		
-		JLabel labelZahtevi = new JLabel("ZAHTEVI");
-		labelZahtevi.setBounds(120, 11, 104, 38);
-		panelZahtevi.add(labelZahtevi);
-		labelZahtevi.setHorizontalAlignment(SwingConstants.LEFT);
-		labelZahtevi.setForeground(myBlue);
-		labelZahtevi.setFont(myFont);
-		
-		
-		JPanel panelRezultati = new JPanel();
-		panelRezultati.setBackground(Color.WHITE);
-		panelRezultati.setBounds(0, 290, 323, 60);
-		panelMeni.add(panelRezultati);
-		panelRezultati.setLayout(null);
-		
-		JLabel iconRezultati = new JLabel("");
-		iconRezultati.setIcon(new ImageIcon(MeniAdministrator.class.getResource("/Interfaces/results.jpg")));
-		iconRezultati.setBounds(30, 0, 50, 60);
-		panelRezultati.add(iconRezultati);
-		
-		JLabel labelRezultati = new JLabel("REZULTATI");
-		labelRezultati.setBounds(120, 11, 104, 38);
-		panelRezultati.add(labelRezultati);
-		labelRezultati.setForeground(myBlue);
-		labelRezultati.setHorizontalAlignment(SwingConstants.LEFT);
-		labelRezultati.setFont(myFont);
-		
-		
-		JPanel panelPacijenti = new JPanel();
-		panelPacijenti.setBackground(Color.WHITE);
-		panelPacijenti.setBounds(0, 350, 323, 60);
-		panelMeni.add(panelPacijenti);
-		panelPacijenti.setLayout(null);
-		
-		JLabel iconPacijenti = new JLabel("");
-		iconPacijenti.setIcon(new ImageIcon(MeniAdministrator.class.getResource("/Interfaces/patient.jpg")));
-		iconPacijenti.setBounds(30, 0, 50, 60);
-		panelPacijenti.add(iconPacijenti);
-		
-		JLabel labelPacijenti = new JLabel("PACIJENTI");
-		labelPacijenti.setBounds(120, 11, 104, 38);
-		labelPacijenti.setForeground(myBlue);
-		panelPacijenti.add(labelPacijenti);
-		labelPacijenti.setHorizontalAlignment(SwingConstants.LEFT);
-		labelPacijenti.setFont(myFont);
-		
-		
+
+		JPanel panelRequests = new JPanel();
+		panelRequests.setBackground(Color.WHITE);
+		panelRequests.setBounds(0, 230, 350, 60);
+		panelMenu.add(panelRequests);
+		panelRequests.setLayout(null);
+
+		JLabel iconRequests = new JLabel("");
+		iconRequests.setIcon(new ImageIcon(MenuAdmin.class.getResource("/Interfaces/request.jpg")));
+		iconRequests.setBounds(30, 0, 50, 60);
+		panelRequests.add(iconRequests);
+
+		JLabel labelRequests = new JLabel("REQUESTS");
+		labelRequests.setBounds(120, 11, 104, 38);
+		panelRequests.add(labelRequests);
+		labelRequests.setHorizontalAlignment(SwingConstants.LEFT);
+		labelRequests.setForeground(myBlue);
+		labelRequests.setFont(myFont);
+
+		JPanel panelResults = new JPanel();
+		panelResults.setBackground(Color.WHITE);
+		panelResults.setBounds(0, 290, 350, 60);
+		panelMenu.add(panelResults);
+		panelResults.setLayout(null);
+
+		JLabel iconResults = new JLabel("");
+		iconResults.setIcon(new ImageIcon(MenuAdmin.class.getResource("/Interfaces/results.jpg")));
+		iconResults.setBounds(30, 0, 50, 60);
+		panelResults.add(iconResults);
+
+		JLabel labelResults = new JLabel("RESULTS");
+		labelResults.setBounds(120, 11, 104, 38);
+		panelResults.add(labelResults);
+		labelResults.setForeground(myBlue);
+		labelResults.setHorizontalAlignment(SwingConstants.LEFT);
+		labelResults.setFont(myFont);
+
+		JPanel panelPatients = new JPanel();
+		panelPatients.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				frame.remove(changingPanel);
+				new PanelPatients();
+				changingPanel = PanelPatients.changingPanel;
+				frame.getContentPane().add(changingPanel);
+				frame.validate();
+				frame.repaint();
+			}
+		});
+		panelPatients.setBackground(Color.WHITE);
+		panelPatients.setBounds(0, 350, 350, 60);
+		panelMenu.add(panelPatients);
+		panelPatients.setLayout(null);
+
+		JLabel iconPatients = new JLabel("");
+		iconPatients.setIcon(new ImageIcon(MenuAdmin.class.getResource("/Interfaces/patient.jpg")));
+		iconPatients.setBounds(30, 0, 50, 60);
+		panelPatients.add(iconPatients);
+
+		JLabel labelPatients = new JLabel("PATIENTS");
+		labelPatients.setBounds(120, 11, 104, 38);
+		labelPatients.setForeground(myBlue);
+		panelPatients.add(labelPatients);
+		labelPatients.setHorizontalAlignment(SwingConstants.LEFT);
+		labelPatients.setFont(myFont);
+
 		JPanel panelRNP = new JPanel();
 		panelRNP.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				Registracija registracija = new Registracija();
-				frame.remove(panelKojiSeMenja);
-				frame.add(registracija.panelKojiSeMenja);
+				frame.remove(changingPanel);
+				new PanelSignUp("SIGN UP");
+				changingPanel = PanelSignUp.changingPanel;
+				frame.getContentPane().add(changingPanel);
 				frame.validate();
 				frame.repaint();
 			}
 		});
 		panelRNP.setBackground(Color.WHITE);
-		panelRNP.setBounds(0, 410, 323, 60);
-		panelMeni.add(panelRNP);
+		panelRNP.setBounds(0, 410, 350, 60);
+		panelMenu.add(panelRNP);
 		panelRNP.setLayout(null);
-		
+
 		JLabel iconRNP = new JLabel("");
-		iconRNP.setIcon(new ImageIcon(MeniAdministrator.class.getResource("/Interfaces/new.jpg")));
+		iconRNP.setIcon(new ImageIcon(MenuAdmin.class.getResource("/Interfaces/new.jpg")));
 		iconRNP.setBounds(30, 0, 50, 60);
 		panelRNP.add(iconRNP);
-		
-		JLabel labelRNP = new JLabel("NOVI PACIJENTI");
+
+		JLabel labelRNP = new JLabel("NEW PATIENT");
 		labelRNP.setFont(myFont);
 		labelRNP.setHorizontalAlignment(SwingConstants.LEFT);
 		labelRNP.setBounds(120, 11, 193, 38);
 		labelRNP.setForeground(myBlue);
 		panelRNP.add(labelRNP);
-		
-		
-		JPanel panelOdjava = new JPanel();
-		panelOdjava.addMouseListener(new MouseAdapter() {
+
+		JPanel panelLogOut = new JPanel();
+		panelLogOut.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				frame.dispose();
@@ -145,21 +143,26 @@ public class MeniTehnicar extends MeniClass {
 				returnLogin.setVisible(true);
 			}
 		});
-		panelOdjava.setBackground(Color.WHITE);
-		panelOdjava.setBounds(0, 470, 323, 60);
-		panelMeni.add(panelOdjava);
-		panelOdjava.setLayout(null);
+		panelLogOut.setBackground(Color.WHITE);
+		panelLogOut.setBounds(0, 470, 350, 60);
+		panelMenu.add(panelLogOut);
+		panelLogOut.setLayout(null);
+
+		JLabel iconLogOut = new JLabel("");
+		iconLogOut.setIcon(new ImageIcon(MenuAdmin.class.getResource("/Interfaces/odjava.jpg")));
+		iconLogOut.setBounds(30, 0, 50, 60);
+		panelLogOut.add(iconLogOut);
+
+		JLabel labelLogOut = new JLabel("LOG OUT");
+		labelLogOut.setBounds(120, 11, 133, 38);
+		panelLogOut.add(labelLogOut);
+		labelLogOut.setForeground(myBlue);
+		labelLogOut.setHorizontalAlignment(SwingConstants.LEFT);
+		labelLogOut.setFont(myFont);
 		
-		JLabel iconOdjava = new JLabel("");
-		iconOdjava.setIcon(new ImageIcon(MeniAdministrator.class.getResource("/Interfaces/odjava.jpg")));
-		iconOdjava.setBounds(30, 0, 50, 60);
-		panelOdjava.add(iconOdjava);
-		
-		JLabel labelOdjava = new JLabel("ODJAVA");
-		labelOdjava.setBounds(120, 11, 133, 38);
-		panelOdjava.add(labelOdjava);
-		labelOdjava.setForeground(myBlue);
-		labelOdjava.setHorizontalAlignment(SwingConstants.LEFT);
-		labelOdjava.setFont(myFont);
+//		JPanel changingPanel = new JPanel();
+//		changingPanel.setBounds(350, 0, 1150, 1000);
+//		getContentPane().add(changingPanel);
+//		changingPanel.setBackground(myBlue);
 	}
 }

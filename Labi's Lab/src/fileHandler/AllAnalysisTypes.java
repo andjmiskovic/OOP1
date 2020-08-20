@@ -7,65 +7,122 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 
-import classes.Analyze;
+import classes.AnalysisType;
+import classes.Discount;
+import classes.Specialization;
 
-public class AllAnalyzes {
-	public static ArrayList<Analyze> listOfAnalyzes;
-	public static ArrayList<String> listOfTypes = new ArrayList<String>(Arrays.asList("USLUGE", "ALERGOLOGIJA",
-			"BIOHEMIJA", "HEMATOLOGIJ_I_HEMOSTAZA", "IMUNOLOGIJA", "LEKOVI", "IMUNO_HEMIJA", "IMUNOHEMIJA_ELIZA",
-			"TRANSFUZIOLOGIJA", "SEROLOGIJA", "SEROLOGIJA_AUTOMATIZOVANA", "MIKROBIOLOGIJA", "GENETIKA"));
+public class AllAnalysisTypes {
+	public static ArrayList<AnalysisType> listOfAnalysisTypes;
+	public static String fileName = "C:\\Users\\Lenovo\\git\\OOP1\\Labi's Lab\\src\\Files\\analysis_typ.csv";
 
-	private static void readAnalyzesFromCSV(String fileName) {
-		listOfAnalyzes = new ArrayList<Analyze>();
+	public static void readFromCSV() throws IOException {
+		listOfAnalysisTypes = new ArrayList<AnalysisType>();
 
 		Path pathToFile = Paths.get(fileName);
 		try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.US_ASCII)) {
 			String line = br.readLine();
 			while (line != null) {
 				String[] attributes = line.split(",");
-				Analyze analyze = createAnalyze(attributes);
-				listOfAnalyzes.add(analyze);
+				AnalysisType analysis = createAnalysisType(attributes);
+				listOfAnalysisTypes.add(analysis);
+				line = br.readLine();
 			}
-			line = br.readLine();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}
 
-	private static Analyze createAnalyze(String[] attributes) {
-		for (int i = 0; i < attributes.length; i++) {
-			attributes[i].trim();
-		}
-		String id = attributes[0];
-		String type = attributes[1];
-		String description = attributes[2];
-		String unit = attributes[3];
-		double minValue = Double.parseDouble(attributes[4]);
-		double maxValue = Double.parseDouble(attributes[5]);
-		double price = Double.parseDouble(attributes[6]);
-		double discount = Double.parseDouble(attributes[7]);
-		return new Analyze(id, type, description, unit, minValue, maxValue, price, discount);
+	private static AnalysisType createAnalysisType(String[] attributes) {
+		String name = attributes[0].trim();
+		String description = attributes[1].trim();
+		String unit = attributes[2].trim();
+		Specialization specialization = Specialization.valueOf(attributes[3].trim());
+		double price = Double.parseDouble(attributes[4]);
+		double lowerBound = Double.parseDouble(attributes[5]);
+		double upperBound = Double.parseDouble(attributes[6]);
+		String discountID = attributes[7].trim();
+		Discount discount = AllDiscounts.getDiscountById(discountID);
+		String discountID2 = attributes[8].trim();
+		Discount discount2 = AllDiscounts.getDiscountById(discountID2);
+		return new AnalysisType(name, description, unit, specialization, price, lowerBound, upperBound, discount,
+				discount2);
 	}
 
-	public void convertToCSV(String fileName) throws IOException {
+	public static void removeAnalysisType(String name) {
+		listOfAnalysisTypes.remove(getAnalysisTypeByName(name));
+		saveData();
+	}
+
+	public static void addAnalysisType(String name, String description, String unit, Specialization group, double price,
+			double lowerBound, double upperBound, Discount discount, Discount d2) {
+		listOfAnalysisTypes
+				.add(new AnalysisType(name, description, unit, group, price, lowerBound, upperBound, discount, d2));
+		saveData();
+	}
+
+	public static AnalysisType getAnalysisTypeByName(String name) {
+		for (AnalysisType analysisType : listOfAnalysisTypes) {
+			if (analysisType.getName().equals(name)) {
+				return analysisType;
+			}
+		}
+		return null;
+	}
+
+	public static void saveData() {
 		FileWriter csvWriter = null;
 		try {
 			csvWriter = new FileWriter(fileName);
-		} catch (IOException e4) {
-			e4.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		try {
-			for (Analyze analyze : listOfAnalyzes) {
-				csvWriter.append(analyze.toString());
+			for (AnalysisType type : listOfAnalysisTypes) {
+				csvWriter.append(type.toString());
 			}
 		} catch (Exception e3) {
 			e3.printStackTrace();
 		}
-		csvWriter.flush();
-		csvWriter.close();
+		try {
+			csvWriter.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			csvWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static double getAnalysisTypePriceWithDiscount(AnalysisType analysisType, LocalDate date) {
+		double price = 0;
+		if (analysisType.getGroupDiscount() != null) {
+			LocalDate today = (new Date()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			if (analysisType.getGroupDiscount().getEndDate().isAfter(date)
+					&& analysisType.getGroupDiscount().getDaysOfDiscount().contains(today.getDayOfWeek())) {
+				price = analysisType.getPrice() * analysisType.getGroupDiscount().getValue();
+			} else {
+				price = analysisType.getPrice();
+			}
+		} else {
+			price = analysisType.getPrice();
+		}
+		if (analysisType.getTypeDiscount() != null) {
+			LocalDate today = (new Date()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			if (analysisType.getTypeDiscount().getEndDate().isAfter(date)
+					&& analysisType.getTypeDiscount().getDaysOfDiscount().contains(today.getDayOfWeek())) {
+				return price * analysisType.getTypeDiscount().getValue();
+			} else {
+				return price;
+			}
+		} else
+			return price;
 	}
 
 }

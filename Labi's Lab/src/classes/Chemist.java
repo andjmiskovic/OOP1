@@ -2,43 +2,46 @@ package classes;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
-public class Chemist extends Employee{
-	private ArrayList<String> listOfSpecializations; 
+public class Chemist extends Employee {
+	private ArrayList<Specialization> listOfSpecializations;
 	private int numberOfFinishedReports;
-	
+
 	public Chemist() {
 		super();
-		this.listOfSpecializations = new ArrayList<String>();
+		this.listOfSpecializations = new ArrayList<Specialization>();
 		this.numberOfFinishedReports = 0;
 	}
-		
+
 	public Chemist(String LBO, String userName, String password, String name, String lastName, String phoneNumber,
-					String adress, LocalDate dateOfBirth, String gender, boolean active,
-					double celery, double bonus, LocalDate start, ArrayList<String> listOfSpecializations, int numberOfFinishedReports){
-		super(LBO, userName, password, name, lastName, phoneNumber, adress, dateOfBirth, gender, active, celery, bonus, start);
-		this.listOfSpecializations = listOfSpecializations;
-		this.setNumberOfFinishedReports(numberOfFinishedReports);
-	}
-	
-	public Chemist(Employee employee, ArrayList<String> listOfSpecializations, int numberOfFinishedReports) {
-		super(employee.getLBO(), employee.getUserName(), employee.getPassword(), employee.getName(),
-			employee.getLastName(), employee.getPhoneNumber(), employee.getAdress(), employee.getDateOfBirth(), 
-			employee.getGender(), employee.isActive(), employee.getCelery(), employee.getBonus(), employee.getStart());
+			String address, LocalDate dateOfBirth, String gender, boolean active, double celery, double bonus,
+			double yearsOfService, Qualification qualification, ArrayList<Specialization> listOfSpecializations, int numberOfFinishedReports) {
+		super(LBO, userName, password, name, lastName, phoneNumber, address, dateOfBirth, gender, active, celery, bonus,
+				yearsOfService, qualification);
 		this.listOfSpecializations = listOfSpecializations;
 		this.setNumberOfFinishedReports(numberOfFinishedReports);
 	}
 
-	public ArrayList<String> getListOfSpecializations() {
+	public Chemist(Employee employee, ArrayList<Specialization> listOfSpecializations, int numberOfFinishedReports) {
+		super(employee.getLBO(), employee.getUserName(), employee.getPassword(), employee.getName(),
+				employee.getLastName(), employee.getPhoneNumber(), employee.getAddress(), employee.getDateOfBirth(),
+				employee.getGender(), employee.isActive(), employee.getCelery(), employee.getBonus(),
+				employee.getYearsOfService(), employee.getQualification());
+		this.listOfSpecializations = listOfSpecializations;
+		this.setNumberOfFinishedReports(numberOfFinishedReports);
+	}
+
+	public ArrayList<Specialization> getListOfSpecializations() {
 		return listOfSpecializations;
 	}
 
-	public void setListOfSpecializations(ArrayList<String> listOfSpecializations) {
+	public void setListOfSpecializations(ArrayList<Specialization> listOfSpecializations) {
 		this.listOfSpecializations = listOfSpecializations;
 	}
-	
+
 	public void addSpecialization(String specialization) {
-		this.listOfSpecializations.add(specialization);
+		this.listOfSpecializations.add(Specialization.valueOf(specialization));
 	}
 
 	public int getNumberOfFinishedReports() {
@@ -48,21 +51,30 @@ public class Chemist extends Employee{
 	public void setNumberOfFinishedReports(int numberOfFinishedReports) {
 		this.numberOfFinishedReports = numberOfFinishedReports;
 	}
-	
+
 	public void incrementNumberOfFinishedReports() {
-		this.numberOfFinishedReports ++;
+		this.numberOfFinishedReports++;
 	}
 	
-	public String toString() {
-		String StringFromListOfSpecializations = "";
-		if (listOfSpecializations.size() > 0) {
-			StringFromListOfSpecializations = listOfSpecializations.get(0);
-			for(int i=1; i< listOfSpecializations.size(); i++) {
-				StringFromListOfSpecializations += "|" + listOfSpecializations.get(i);
-			}
+	public String specializationsToString(ArrayList<Specialization> listOfSpecializations) {
+		ArrayList<String> list = new ArrayList<String>();
+		for (Specialization specialization : listOfSpecializations) {
+			list.add(specialization.getName());
 		}
-		return "chemist," + super.toString() + "," + StringFromListOfSpecializations + "," + String.valueOf(numberOfFinishedReports) + "\n";
+		return list.stream().collect(Collectors.joining("|"));
+	}
+
+	public String toString() {
+		return "chemist," + super.toString() + "," + specializationsToString(listOfSpecializations) + ","
+				+ String.valueOf(numberOfFinishedReports) + "\n";
+	}
+
+	public void updateInfo(String LBO, String userName, String password, String name, String lastName,
+			String phoneNumber, String address, LocalDate dateOfBirth, String gender, boolean active, double celery,
+			double bonus, double yearsOfService, Qualification qualification, ArrayList<Specialization> listOfSpecializations, int numberOfFinishedReports) {
+		super.updateInfo(LBO, userName, password, name, lastName, phoneNumber, address, dateOfBirth, gender, active,
+				celery, bonus, yearsOfService, qualification);
+		this.listOfSpecializations = listOfSpecializations;
+		this.setNumberOfFinishedReports(numberOfFinishedReports);
 	}
 }
-
-

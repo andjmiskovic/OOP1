@@ -1,7 +1,5 @@
 package classes;
 
-import java.io.Console;
-
 import fileHandler.Users;
 
 public class CurrentUser {

@@ -3,28 +3,21 @@ package classes;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Person {
+public abstract class Person {
 
-	private String LBO;
-	private String userName;
-	private String password;
-	private String name;
-	private String lastName;
-	private String phoneNumber;
-	private String adress;
-	private String gender;
+	private String LBO, userName, password, name, lastName, phoneNumber, address, gender;
 	private LocalDate dateOfBirth;
 	private boolean active;
 
 	public Person(String LBO, String userName, String password, String name, String lastName, String phoneNumber,
-			String adress, LocalDate dateOfBirth, String gender, boolean active) {
+			String address, LocalDate dateOfBirth, String gender, boolean active) {
 		this.LBO = LBO;
 		this.userName = userName;
 		this.password = password;
 		this.name = name;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
-		this.adress = adress;
+		this.address = address;
 		this.dateOfBirth = dateOfBirth;
 		this.gender = gender;
 		this.active = active;
@@ -37,10 +30,24 @@ public class Person {
 		this.name = "";
 		this.lastName = "";
 		this.phoneNumber = "";
-		this.adress = "";
+		this.address = "";
 		this.dateOfBirth = null;
 		this.gender = null;
 		this.active = true;
+	}
+
+	public void updateInfo(String LBO, String userName, String password, String name, String lastName,
+			String phoneNumber, String address, LocalDate dateOfBirth, String gender, boolean active) {
+		this.setLBO(LBO);
+		this.setUserName(userName);
+		this.setPassword(password);
+		this.setName(name);
+		this.setLastName(lastName);
+		this.setPhoneNumber(phoneNumber);
+		this.setAddress(address);
+		this.setDateOfBirth(dateOfBirth);
+		this.setGender(gender);
+		this.setActive(active);
 	}
 
 	public String getLBO() {
@@ -91,12 +98,12 @@ public class Person {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getAdress() {
-		return adress;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setAdress(String adress) {
-		this.adress = adress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public LocalDate getDateOfBirth() {
@@ -125,16 +132,9 @@ public class Person {
 
 	@Override
 	public String toString() {
-		return LBO + "," + userName + "," + password + "," + name + "," + lastName + "," + phoneNumber + "," + adress
-				+ "," + dateOfBirth.format(DateTimeFormatter.ofPattern("dd.MM.yy.")) + "," + gender + ","
+		return LBO + "," + userName + "," + password + "," + name + "," + lastName + "," + phoneNumber + "," + address
+				+ "," + dateOfBirth.format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")) + "," + gender + ","
 				+ String.valueOf(active);
-	}
-
-	public static String toString(Person person) {
-		return person.getLBO() + "," + person.getUserName() + "," + person.getPassword() + "," + person.getName() + ","
-				+ person.getLastName() + "," + person.getPhoneNumber() + "," + person.getAdress() + ","
-				+ person.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd.MM.yy.")) + "," + person.getGender()
-				+ "," + String.valueOf(person.isActive());
 	}
 
 }

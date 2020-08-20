@@ -16,7 +16,12 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import classes.CurrentUser;
+import fileHandler.AllAnalysisRequests;
+import fileHandler.AllAnalysisTypes;
+import fileHandler.AllDiscounts;
+import fileHandler.SalaryCoefficients;
 import fileHandler.Users;
+import functions.JTextFieldCharLimit;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -24,23 +29,21 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingConstants;
 
 public class Login extends JFrame {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField lozinka;
-	private JTextField korisnickoIme;
+	private JTextField passwordField;
+	private JTextField userNameField;
 	JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Users.readUsersFromCSV("C:\\Users\\Lenovo\\eclipse-workspace\\Labi's Lab\\src\\Files\\Users.csv");
+					Users.readUsersFromCSV();
+					AllDiscounts.readFromCSV();
+					AllAnalysisTypes.readFromCSV();
+					SalaryCoefficients.readFromCSV();
+					AllAnalysisRequests.readRequestsFromCSV();
 					Login frame = new Login();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -55,10 +58,10 @@ public class Login extends JFrame {
 		frame = this;
 		Color myBlue = new Color(6, 56, 74);
 
-		setTitle("Prijava na sistem");
+		setTitle("Login");
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(300, 100, 981, 514);
+		setBounds(300, 100, 970, 500);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -73,48 +76,48 @@ public class Login extends JFrame {
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(Login.class.getResource("/Interfaces/girl.jpg")));
-		lblNewLabel_1.setBounds(0, -17, 463, 507);
-		panel_1.add(lblNewLabel_1);
+		JLabel icon = new JLabel("");
+		icon.setIcon(new ImageIcon(Login.class.getResource("/Interfaces/girl.jpg")));
+		icon.setBounds(0, -17, 463, 507);
+		panel_1.add(icon);
 
-		JLabel labelaZaIspisGreske = new JLabel("");
-		labelaZaIspisGreske.setHorizontalAlignment(SwingConstants.CENTER);
-		labelaZaIspisGreske.setForeground(Color.CYAN);
-		labelaZaIspisGreske.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		labelaZaIspisGreske.setBounds(478, 305, 462, 32);
-		contentPane.add(labelaZaIspisGreske);
+		JLabel labelError = new JLabel("");
+		labelError.setHorizontalAlignment(SwingConstants.CENTER);
+		labelError.setForeground(Color.CYAN);
+		labelError.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		labelError.setBounds(478, 293, 462, 32);
+		contentPane.add(labelError);
 
-		Button prijava = new Button("PRIJAVA");
-		prijava.addMouseListener(new MouseAdapter() {
+		Button login = new Button("LOGIN");
+		login.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				String userName = korisnickoIme.getText();
-				String password = lozinka.getText();
+				String userName = userNameField.getText();
+				String password = passwordField.getText();
 				String classString = CurrentUser.setCurrentUser(userName, password);
 				if (classString.equals("")) {
-					labelaZaIspisGreske.setText("Pogrešno korisničko ime ili pogrešna lozinka.");
+					labelError.setText("Wrong password or username.");
 				} else {
 					switch (classString) {
 					case "Patient":
 						frame.dispose();
-						MeniPacijent meniPacijent = new MeniPacijent();
-						meniPacijent.setVisible(true);
+						MenuPatient menuPatient = new MenuPatient();
+						menuPatient.setVisible(true);
 						break;
 					case "Chemist":
 						frame.dispose();
-						MeniLaborant meniLaborant = new MeniLaborant();
-						meniLaborant.setVisible(true);
+						MenuChemist menuChemist = new MenuChemist();
+						menuChemist.setVisible(true);
 						break;
 					case "MedicalTechnicial":
 						frame.dispose();
-						MeniTehnicar meniTehnicar = new MeniTehnicar();
-						meniTehnicar.setVisible(true);
+						MenuTechnicial menuTechnicial = new MenuTechnicial();
+						menuTechnicial.setVisible(true);
 						break;
 					case "Admin":
 						frame.dispose();
-						MeniAdministrator meniAdministrator = new MeniAdministrator();
-						meniAdministrator.setVisible(true);
+						MenuAdmin menuAdmin = new MenuAdmin();
+						menuAdmin.setVisible(true);
 						break;
 					default:
 						break;
@@ -122,61 +125,64 @@ public class Login extends JFrame {
 				}
 			}
 		});
-		prijava.setFont(new Font("Dialog", Font.PLAIN, 16));
-		prijava.setBackground(myBlue);
-		prijava.setForeground(SystemColor.text);
-		prijava.setBounds(552, 362, 302, 49);
-		contentPane.add(prijava);
+		login.setFont(new Font("Dialog", Font.PLAIN, 16));
+		login.setBackground(myBlue);
+		login.setForeground(SystemColor.text);
+		login.setBounds(552, 341, 302, 49);
+		contentPane.add(login);
 
-		JLabel lblNewLabel = new JLabel("Korisni\u010Dko ime:");
-		lblNewLabel.setForeground(myBlue);
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel.setBounds(552, 122, 179, 32);
-		contentPane.add(lblNewLabel);
+		JLabel labelUsername = new JLabel("Username:");
+		labelUsername.setForeground(myBlue);
+		labelUsername.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		labelUsername.setBounds(552, 109, 179, 32);
+		contentPane.add(labelUsername);
 
-		JLabel lblLozinka = new JLabel("Lozinka:");
-		lblLozinka.setForeground(myBlue);
-		lblLozinka.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblLozinka.setBounds(552, 208, 115, 32);
-		contentPane.add(lblLozinka);
+		JLabel labelPassword = new JLabel("Password:");
+		labelPassword.setForeground(myBlue);
+		labelPassword.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		labelPassword.setBounds(552, 195, 115, 32);
+		contentPane.add(labelPassword);
 
-		lozinka = new JPasswordField();
-		lozinka.setColumns(10);
-		lozinka.setBounds(552, 251, 302, 32);
-		contentPane.add(lozinka);
+		passwordField = new JPasswordField();
+		passwordField.setColumns(10);
+		passwordField.setBounds(552, 238, 302, 32);
+		passwordField.setDocument(new JTextFieldCharLimit(20));
+		contentPane.add(passwordField);
 
-		korisnickoIme = new JTextField();
-		korisnickoIme.setColumns(10);
-		korisnickoIme.setBounds(552, 172, 302, 32);
-		contentPane.add(korisnickoIme);
+		userNameField = new JTextField();
+		userNameField.setColumns(10);
+		userNameField.setBounds(552, 159, 302, 32);
+		userNameField.setDocument(new JTextFieldCharLimit(20));
+		contentPane.add(userNameField);
 
-		JLabel lblNewLabel_2 = new JLabel("Dobro do\u0161li u na\u0161u laboratoriju!");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 26));
-		lblNewLabel_2.setForeground(myBlue);
-		lblNewLabel_2.setBounds(498, 29, 442, 72);
-		contentPane.add(lblNewLabel_2);
+		JLabel labelWelcome = new JLabel("Welcome to our lab!");
+		labelWelcome.setFont(new Font("Tahoma", Font.BOLD, 26));
+		labelWelcome.setForeground(myBlue);
+		labelWelcome.setBounds(552, 28, 442, 72);
+		contentPane.add(labelWelcome);
 
-		JLabel lblNemateNalog = new JLabel("Nemate nalog? ");
-		lblNemateNalog.addMouseListener(new MouseAdapter() {
+		JLabel labelNoAccount = new JLabel("Don't have an account? ");
+		labelNoAccount.addMouseListener(new MouseAdapter() {
+			@SuppressWarnings("static-access")
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				MeniClass newFrame = new MeniClass("Registracija");
-				Registracija registracija = new Registracija();
-				newFrame.remove(newFrame.panelKojiSeMenja);
-				newFrame.getContentPane().add(registracija.panelKojiSeMenja);
+				MenuClass newFrame = new MenuClass("Sign Up");
+				PanelSignUp registracija = new PanelSignUp("Sign Up");
+				newFrame.remove(newFrame.changingPanel);
+				newFrame.getContentPane().add(registracija.changingPanel);
 				newFrame.setVisible(true);
 				frame.dispose();
 			}
 		});
-		lblNemateNalog.setForeground(new Color(6, 56, 74));
-		lblNemateNalog.setFont(new Font("Tahoma", Font.PLAIN, 22));
-		lblNemateNalog.setBounds(543, 413, 442, 72);
-		contentPane.add(lblNemateNalog);
+		labelNoAccount.setForeground(new Color(6, 56, 74));
+		labelNoAccount.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		labelNoAccount.setBounds(530, 396, 435, 68);
+		contentPane.add(labelNoAccount);
 
-		JLabel lblRegistrujteSe = new JLabel("Registrujte se!");
-		lblRegistrujteSe.setForeground(new Color(6, 56, 74));
-		lblRegistrujteSe.setFont(new Font("Tahoma", Font.BOLD, 22));
-		lblRegistrujteSe.setBounds(706, 413, 442, 72);
-		contentPane.add(lblRegistrujteSe);
+		JLabel labelSignUp = new JLabel("Sign Up!");
+		labelSignUp.setForeground(new Color(6, 56, 74));
+		labelSignUp.setFont(new Font("Tahoma", Font.BOLD, 22));
+		labelSignUp.setBounds(773, 394, 380, 72);
+		contentPane.add(labelSignUp);
 	}
 }

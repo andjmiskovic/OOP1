@@ -10,6 +10,7 @@ public class CsvWriter {
 		try {
 			File nekiFile = new File("");
 			nekiFile = new File(nekiFile.getAbsolutePath() + "\\src\\Files\\test.csv");
+			@SuppressWarnings("resource")
 			PrintWriter writer = new PrintWriter(nekiFile);
 			StringBuilder sb = new StringBuilder();
 			sb.append("id,");

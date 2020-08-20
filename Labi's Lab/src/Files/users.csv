@@ -1,0 +1,9 @@
+patient,99999999999,patient,p,p,p,12,12000,16.08.2020.,male,true
+patient,11111111100,po,p,p,p,12,12,16.08.2020.,male,true
+patient,98989989898,andjimis,a,a,a,8787878787,an98,14.08.2020.,male,true
+patient,55555555888,acamis,aca,aca,miskovic,0653517308,pop680,25.04.1974.,male,true
+patient,00000000000,baba,vida,vidosava,vida,123,pop68,02.08.2008.,female,true
+patient,12312312312,p,p,a,a,1,A19,12.12.2000.,male,true
+patient,12345678911,djukic.nemanja,labipass,Nemanja,djukic,06374122991,selo Radobic bb 14242 Mionica,23.11.2003.,Male,true
+admin,12312312312,a,a,aaa,a,746549776,A1,12.12.2020.,male,true,0.0,80.0,0.0,One
+technicial,12312312312,m,m,a,a,1,A1,12.12.2020.,male,true,890.0,80.0,6.0,One,0,0

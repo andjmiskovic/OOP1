@@ -48,7 +48,7 @@ public class Validations {
 	}
 	
 	public static boolean valideAdress(String adress) {
-		String regex = "[0-9* -]*";
+		String regex = "[a-zA-Z/0-9* -]*";
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(adress);
 		if (adress.length() == 0)
@@ -61,23 +61,23 @@ public class Validations {
 	public static String validationTextForSignUp(String userName, String password, String password2, 
 			String LBOString, String name, String lastName, String adress, String phoneNumber) {
 		if (!valideName(userName))
-			return "Korisničko ime nije validno.";
+			return "Username is not valid.";
 		if (!Unique.isUniqueUserName(userName))
-			return "Korisničko ime nije jedinstveno.";
+			return "Username is not unique.";
 		if (!valideName(password))
-			return "Lozinka nije validna.";
+			return "Password is not valid.";
 		if (!password.equals(password2))
-			return "Potvrdjena lozinka nije ista kao i lozinka.";
+			return "Password and confirmation password are not equal.";
 		if(!valideLBO(LBOString))
-			return "LBO mora sadržati tačno 11 brojeva i mora biti jedinstven.";
+			return "LBO needs to have 11 digits and to be unique.";
 		if (!valideName(name))
-			return "Ime nije validno.";
+			return "Name is not valid.";
 		if (!valideName(lastName))
-			return "Prezime nije validno.";
+			return "Last name is not valid.";
 		if (!valideAdress(adress))
-			return "Adresa nije validna.";
+			return "Address is not valid.";
 		if (!validePhoneNumber(phoneNumber))
-			return "Broj telefona nije validan.";
+			return "Phone number is not valid.";
 		return "";
 	}
 }

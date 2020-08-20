@@ -8,21 +8,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class MeniClass extends JFrame {
+public class MenuClass extends JFrame {
 	private static final long serialVersionUID = 1L;
-	protected JPanel panelMeni;
-	protected JPanel panelKojiSeMenja;
+	protected JPanel panelMenu;
+	public static JPanel changingPanel;
 	JFrame frame;
 	
-	public JPanel getPanelKojiSeMenja() {
-		return panelKojiSeMenja;
+	public JPanel getChangingPanel() {
+		return changingPanel;
 	}
 
-	public void setPanelKojiSeMenja(JPanel panelKojiSeMenja) {
-		this.panelKojiSeMenja = panelKojiSeMenja;
+	public static void setChangingPanel(JPanel panel) {
+		changingPanel = panel;
 	}
 	
-	public MeniClass(String title) {
+	public MenuClass(String title) {
 		super();
 		Color myBlue = new Color(6, 56, 74);
 		getContentPane().setBackground(myBlue);
@@ -30,26 +30,26 @@ public class MeniClass extends JFrame {
 		setResizable(false);
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(300, 100, 1050, 750);
+		setBounds(200, 20, 1500, 1000);
 		setTitle(title);
 		getContentPane().setLayout(null);
 		
-		panelMeni = new JPanel();
-		panelMeni.setBounds(0, 0, 323, 719);
-		panelMeni.setBackground(Color.WHITE);
-		getContentPane().add(panelMeni);
-		panelMeni.setLayout(null);
+		panelMenu = new JPanel();
+		panelMenu.setBounds(0, 0, 350, 1000);
+		panelMenu.setBackground(Color.WHITE);
+		getContentPane().add(panelMenu);
+		panelMenu.setLayout(null);
 		
-		JLabel lbllogo = new JLabel("New label");
-		lbllogo.setIcon(new ImageIcon(MeniClass.class.getResource("/Interfaces/labi200.jpg")));
+		JLabel lbllogo = new JLabel("");
+		lbllogo.setIcon(new ImageIcon(MenuClass.class.getResource("/Interfaces/labi200.jpg")));
 		lbllogo.setBounds(10, 11, 303, 200);
-		panelMeni.add(lbllogo);
+		panelMenu.add(lbllogo);
 		
-		panelKojiSeMenja = new JPanel();
-		panelKojiSeMenja.setBounds(324, 0, 720, 719);
-		getContentPane().add(panelKojiSeMenja);
-		panelKojiSeMenja.setBackground(myBlue);
-		panelKojiSeMenja.setLayout(null);
+		changingPanel = new JPanel();
+		changingPanel.setBounds(350, 0, 1150, 1000);
+		getContentPane().add(changingPanel);
+		changingPanel.setBackground(myBlue);
+		changingPanel.setLayout(null);
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("logo300.jpg")));
 	}

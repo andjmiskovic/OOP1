@@ -10,7 +10,6 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import classes.Admin;
 import classes.Chemist;
@@ -18,14 +17,17 @@ import classes.Employee;
 import classes.MedicalTechnicial;
 import classes.Patient;
 import classes.Person;
+import classes.Qualification;
+import classes.Specialization;
 
 public class Users {
 	public static ArrayList<Patient> listOfPatients;
 	public static ArrayList<MedicalTechnicial> listOfMedicalTechnicials;
 	public static ArrayList<Chemist> listofChemists;
 	public static ArrayList<Admin> listOfAdmins;
+	public static String fileName = "C:\\Users\\Lenovo\\git\\OOP1\\Labi's Lab\\src\\Files\\users.csv";
 
-	public static void readUsersFromCSV(String fileName) {
+	public static void readUsersFromCSV() {
 		listOfPatients = new ArrayList<Patient>();
 		listOfMedicalTechnicials = new ArrayList<MedicalTechnicial>();
 		listofChemists = new ArrayList<Chemist>();
@@ -37,89 +39,78 @@ public class Users {
 			while (line != null) {
 				String[] attributes = line.split(",");
 				String role = attributes[0];
-				Person user = createPerson(attributes);
+				Patient patient = createPatient(attributes);
 				if (role.equals("patient")) {
-					Patient patient = createPatient(user, attributes);
 					listOfPatients.add(patient);
+				} else {
+					Employee employee = createEmployee(patient, attributes);
+					if (role.equals("admin")) {
+						Admin admin = createAdmin(employee, attributes);
+						listOfAdmins.add(admin);
+					} else if (role.equals("chemist")) {
+						Chemist chemist = createChemist(employee, attributes);
+						listofChemists.add(chemist);
+					} else if (role.equals("technicial")) {
+						MedicalTechnicial technicial = createMedicalTechnicial(employee, attributes);
+						listOfMedicalTechnicials.add(technicial);
+					}
 				}
-				Employee employee = createEmployee(user, attributes);
-				if (role.equals("admin")) {
-					Admin admin = createAdmin(employee, attributes);
-					listOfAdmins.add(admin);
-				} else if (role.equals("chemist")) {
-					Chemist chemist = createChemist(employee, attributes);
-					listofChemists.add(chemist);
-				} else if (role.equals("technicial")) {
-					MedicalTechnicial technicial = createMedicalTechnicial(employee, attributes);
-					listOfMedicalTechnicials.add(technicial);
-				}
+				line = br.readLine();
 			}
-			line = br.readLine();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}
 
-	private static Person createPerson(String[] metadata) {
-		for (int i = 1; i < 11; i++) {
-			metadata[i].trim();
-		}
-		String LBO = metadata[1];
-		String userName = metadata[2];
-		String password = metadata[3];
-		String name = metadata[4];
-		String lastName = metadata[5];
-		String phoneNumber = metadata[6];
-		String adress = metadata[7];
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
-		String date = metadata[8];
-		LocalDate dateOfBirth = LocalDate.parse(date, formatter);
-		String gender = metadata[9];
-		boolean active = Boolean.parseBoolean(metadata[10]);
-		return new Person(LBO, userName, password, name, lastName, phoneNumber, adress, dateOfBirth, gender, active);
-	}
-
-	private static Employee createEmployee(Person user, String[] metadata) {
-		for (int i = 11; i < 14; i++) {
-			metadata[i].trim();
-		}
-		double celery = Double.parseDouble(metadata[10]);
-		double bonus = Double.parseDouble(metadata[11]);
-		String startDate = metadata[12];
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
-		LocalDate startedWorking = LocalDate.parse(startDate, formatter);
-		return new Employee(user, celery, bonus, startedWorking);
+	private static Employee createEmployee(Patient user, String[] metadata) {
+		double celery = Double.parseDouble(metadata[11].trim());
+		double bonus = Double.parseDouble(metadata[12].trim());
+		double yeardOfService = Double.parseDouble(metadata[13].trim());
+		Qualification qualification = Qualification.valueOf(metadata[14].trim());
+		return new Employee((Person) user, celery, bonus, yeardOfService, qualification);
 	}
 
 	private static Admin createAdmin(Employee employee, String[] metadata) {
 		return new Admin(employee);
 	}
 
-	private static Patient createPatient(Person user, String[] metadata) {
-		return new Patient(user);
+	private static Patient createPatient(String[] metadata) {
+		String LBO = metadata[1].trim();
+		String userName = metadata[2].trim();
+		String password = metadata[3].trim();
+		String name = metadata[4].trim();
+		String lastName = metadata[5].trim();
+		String phoneNumber = metadata[6].trim();
+		String adress = metadata[7].trim();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+		String date = metadata[8].trim();
+		LocalDate dateOfBirth = LocalDate.parse(date, formatter);
+		String gender = metadata[9].trim();
+		boolean active = Boolean.parseBoolean(metadata[10].trim());
+		return new Patient(LBO, userName, password, name, lastName, phoneNumber, adress, dateOfBirth, gender, active);
 	}
 
 	private static Chemist createChemist(Employee employee, String[] metadata) {
-		for (int i = 14; i < 16; i++) {
-			metadata[i].trim();
+		ArrayList<Specialization> arrayListOfSpecializations = new ArrayList<Specialization>();
+		String[] listOfSpecializations = metadata[15].trim().split("|");
+		int numberOfFinishedReports = Integer.parseInt(metadata[16].trim());
+		try {
+			for (String specialization : listOfSpecializations) {
+				arrayListOfSpecializations.add(Specialization.valueOf(specialization.trim()));
+			}
+			return new Chemist(employee, arrayListOfSpecializations, numberOfFinishedReports);
+		} catch (Exception e) {
+			return new Chemist(employee, new ArrayList<Specialization>(), numberOfFinishedReports);
 		}
-		String[] listOfSpecializations = metadata[13].split("|");
-		ArrayList<String> arrayListOfSpecializations = new ArrayList<String>();
-		Collections.addAll(arrayListOfSpecializations, listOfSpecializations);
-		int numberOfFinishedReports = Integer.parseInt(metadata[14]);
-		return new Chemist(employee, arrayListOfSpecializations, numberOfFinishedReports);
 	}
 
 	private static MedicalTechnicial createMedicalTechnicial(Employee employee, String[] metadata) {
-		for (int i = 14; i < 16; i++) {
-			metadata[i].trim();
-		}
-		int numberOfFinishedRequests = Integer.parseInt(metadata[13]);
-		int numberOfHouseVisits = Integer.parseInt(metadata[14]);
+		int numberOfFinishedRequests = Integer.parseInt(metadata[15].trim());
+		int numberOfHouseVisits = Integer.parseInt(metadata[16].trim());
 		return new MedicalTechnicial(employee, numberOfFinishedRequests, numberOfHouseVisits);
 	}
 
-	public void convertToCSV(String fileName) throws IOException {
+	public static void saveData() {
 		FileWriter csvWriter = null;
 		try {
 			csvWriter = new FileWriter(fileName);
@@ -154,8 +145,205 @@ public class Users {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		csvWriter.flush();
-		csvWriter.close();
+		try {
+			csvWriter.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			csvWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static String[][] getListOfPatientsInfo() {
+		listOfPatients = new ArrayList<Patient>();
+		String[][] listOfInfoStrings = new String[listOfPatients.size()][5];
+		for (int i = 0; i < listOfPatients.size(); i++) {
+			listOfInfoStrings[i][0] = listOfPatients.get(i).getUserName();
+			listOfInfoStrings[i][1] = listOfPatients.get(i).getName();
+			listOfInfoStrings[i][2] = listOfPatients.get(i).getLastName();
+			listOfInfoStrings[i][3] = listOfPatients.get(i).getLBO();
+			listOfInfoStrings[i][4] = listOfPatients.get(i).getDateOfBirth()
+					.format(DateTimeFormatter.ofPattern("dd.MM.yyyy."));
+		}
+		return listOfInfoStrings;
+	}
+
+	public static Patient getPatientByUsername(String username) {
+		for (Patient patient : listOfPatients) {
+			if (patient.getUserName().equals(username)) {
+				return patient;
+			}
+		}
+		return null;
+	}
+
+	public static Admin getAdminByUsername(String username) {
+		for (Admin admin : listOfAdmins) {
+			if (admin.getUserName().equals(username)) {
+				return admin;
+			}
+		}
+		return null;
+	}
+
+	public static MedicalTechnicial getMedicalTechnicialByUsername(String username) {
+		for (MedicalTechnicial medicalTechnicial : listOfMedicalTechnicials) {
+			if (medicalTechnicial.getUserName().equals(username)) {
+				return medicalTechnicial;
+			}
+		}
+		return null;
+	}
+
+	public static Chemist getChemistByUsername(String username) {
+		for (Chemist chemist : listofChemists) {
+			if (chemist.getUserName().equals(username)) {
+				return chemist;
+			}
+		}
+		return null;
+	}
+
+	public static void addAdmin(String LBO, String username, String password, String name, String lastName,
+			String phoneNumber, String address, LocalDate dateOfBirth, String gender, double celery, double bonus,
+			double yearsOfService, Qualification qualification) {
+		listOfAdmins.add(new Admin(LBO, username, password, name, lastName, phoneNumber, address, dateOfBirth, gender,
+				true, celery, bonus, yearsOfService, qualification));
+		saveData();
+	}
+
+	public static void addPatient(String LBO, String username, String password, String name, String lastName,
+			String phoneNumber, String address, LocalDate dateOfBirth, String gender) {
+		listOfPatients.add(
+				new Patient(LBO, username, password, name, lastName, phoneNumber, address, dateOfBirth, gender, true));
+		saveData();
+	}
+
+	public static void addMedicalTechnicial(String LBO, String username, String password, String name, String lastName,
+			String phoneNumber, String address, LocalDate dateOfBirth, String gender, double celery, double bonus,
+			double yearsOfService, Qualification qualification) {
+		listOfMedicalTechnicials.add(new MedicalTechnicial(LBO, username, password, name, lastName, phoneNumber,
+				address, dateOfBirth, gender, true, celery, bonus, yearsOfService, qualification, 0, 0));
+		saveData();
+	}
+
+	public static void addChemist(String LBO, String username, String password, String name, String lastName,
+			String phoneNumber, String address, LocalDate dateOfBirth, String gender, double celery, double bonus,
+			double yearsOfService, Qualification qualification, ArrayList<Specialization> listOfSpecializations,
+			int numberOfFinishedReports) {
+		listofChemists.add(
+				new Chemist(LBO, username, password, name, lastName, phoneNumber, address, dateOfBirth, gender, true,
+						celery, bonus, yearsOfService, qualification, listOfSpecializations, numberOfFinishedReports));
+		saveData();
+	}
+
+	public static void removeAdmin(String username) {
+		Admin admin = getAdminByUsername(username);
+		listOfAdmins.remove(admin);
+		saveData();
+	}
+
+	public static void removePatient(String username) {
+		Patient patient = getPatientByUsername(username);
+		listOfPatients.remove(patient);
+		saveData();
+	}
+
+	public static void removeChemist(String username) {
+		Chemist chemist = getChemistByUsername(username);
+		listofChemists.remove(chemist);
+		saveData();
+	}
+
+	public static void removeMedicalTechnicial(String username) {
+		MedicalTechnicial medicalTechnicial = getMedicalTechnicialByUsername(username);
+		listOfMedicalTechnicials.remove(medicalTechnicial);
+		saveData();
+	}
+
+	public static void editAdmin(String LBO, String username, String password, String name, String lastName,
+			String phoneNumber, String address, LocalDate dateOfBirth, String gender, double celery, double bonus,
+			double yearsOfService, Qualification qualification) {
+		removeAdmin(username);
+		addAdmin(LBO, username, password, name, lastName, phoneNumber, address, dateOfBirth, gender, celery, bonus,
+				yearsOfService, qualification);
+		saveData();
+	}
+
+	public static void editPatient(String LBO, String username, String password, String name, String lastName,
+			String phoneNumber, String address, LocalDate dateOfBirth, String gender) {
+		removePatient(username);
+		addPatient(LBO, username, password, name, lastName, phoneNumber, address, dateOfBirth, gender);
+		saveData();
+	}
+
+	public static void editChemist(String LBO, String username, String password, String name, String lastName,
+			String phoneNumber, String address, LocalDate dateOfBirth, String gender, double celery, double bonus,
+			double yearsOfService, Qualification qualification, ArrayList<Specialization> listOfSpecializations,
+			int numberOfFinishedReports) {
+		removeChemist(username);
+		addChemist(LBO, username, password, name, lastName, phoneNumber, address, dateOfBirth, gender, celery, bonus,
+				yearsOfService, qualification, listOfSpecializations, numberOfFinishedReports);
+		saveData();
+	}
+
+	public static void editMedicalTechnicial(String LBO, String username, String password, String name, String lastName,
+			String phoneNumber, String address, LocalDate dateOfBirth, String gender, double celery, double bonus,
+			double yearsOfService, Qualification qualification) {
+		removeMedicalTechnicial(username);
+		addMedicalTechnicial(LBO, username, password, name, lastName, phoneNumber, address, dateOfBirth, gender, celery,
+				bonus, yearsOfService, qualification);
+		saveData();
+	}
+
+	public static ArrayList<Employee> getEmployees() {
+		ArrayList<Employee> employees = new ArrayList<Employee>();
+		employees.addAll(listOfMedicalTechnicials);
+		employees.addAll(listofChemists);
+		employees.addAll(listOfAdmins);
+		return employees;
+	}
+
+	public static Employee getEmployeeByUserName(String username) {
+		for (Employee employee : getEmployees()) {
+			if (employee.getUserName().equals(username)) {
+				return employee;
+			}
+		}
+		return null;
+	}
+	
+	public static Employee getEmployeeByUserName(String role, String username) {
+		switch (role.toLowerCase()) {
+		case "admin":
+			return getAdminByUsername(username);
+		case "chemist":
+			return getChemistByUsername(username);
+		case "medicaltechnicial":
+			return getMedicalTechnicialByUsername(username);
+		default:
+			break;
+		}
+		return null;
+	}
+
+	public static void removeEmployee(String role, String username) {
+		switch (role.toLowerCase()) {
+		case "admin":
+			removeAdmin(username);
+			break;
+		case "chemist":
+			removeChemist(username);
+			break;
+		case "medicialtechnicial":
+			removeMedicalTechnicial(username);
+			break;
+		default:
+			break;
+		}
 	}
 
 }

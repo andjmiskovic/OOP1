@@ -25,13 +25,15 @@ import functions.Validations;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.ImageIcon;
 
 public class PanelSignUp extends JPanel {
 	private static final long serialVersionUID = 1L;
 	static JPanel changingPanel;
 
-	// namena moze biti "VIEW" - izmena sopstvenih podataka kod pacijenta ili med.teh., 
-	//					"REGISTER" - kod pacijenta ili kod med.teh.
+	// namena moze biti "VIEW" - izmena sopstvenih podataka kod pacijenta ili
+	// med.teh.,
+	// "REGISTER" - kod pacijenta ili kod med.teh.
 	public PanelSignUp(String caseString) {
 		setUp(caseString);
 
@@ -41,155 +43,162 @@ public class PanelSignUp extends JPanel {
 		Color myBlue = new Color(6, 56, 74);
 
 		changingPanel = new JPanel();
-		changingPanel.setBounds(324, 0, 1070, 719);
+		changingPanel.setBounds(350, 0, 1150, 1000);
 		changingPanel.setBackground(myBlue);
 		changingPanel.setLayout(null);
-		
+
 		JLabel labelSignUp = new JLabel(caseString);
 		labelSignUp.setForeground(Color.WHITE);
 		labelSignUp.setFont(new Font("Tahoma", Font.PLAIN, 34));
-		labelSignUp.setBounds(46, 34, 308, 59);
+		labelSignUp.setBounds(165, 51, 516, 59);
 		changingPanel.add(labelSignUp);
+
+		JLabel icon = new JLabel("");
+		icon.setIcon(new ImageIcon(PanelSignUp.class.getResource("/Interfaces/signUpBlue.jpg")));
+		icon.setBounds(75, 51, 70, 70);
+		changingPanel.add(icon);
 
 		JLabel labelUserName = new JLabel("Username:");
 		labelUserName.setForeground(Color.WHITE);
 		labelUserName.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		labelUserName.setBounds(46, 113, 204, 33);
+		labelUserName.setBounds(46, 183, 204, 33);
 		changingPanel.add(labelUserName);
 
 		JTextField userName = new JTextField();
-		userName.setBounds(46, 157, 282, 33);
+		userName.setBounds(46, 227, 350, 33);
 		userName.setDocument(new JTextFieldCharLimit(20));
 		changingPanel.add(userName);
 		userName.setColumns(10);
 
 		JTextField name = new JTextField();
 		name.setColumns(10);
-		name.setBounds(381, 157, 282, 33);
+		name.setBounds(46, 618, 350, 33);
 		name.setDocument(new JTextFieldCharLimit(20));
 		changingPanel.add(name);
 
 		JLabel labelName = new JLabel("Name:");
 		labelName.setForeground(Color.WHITE);
 		labelName.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		labelName.setBounds(381, 113, 204, 33);
+		labelName.setBounds(46, 574, 204, 33);
 		changingPanel.add(labelName);
 
 		JLabel labelPassword = new JLabel("Password:");
 		labelPassword.setForeground(Color.WHITE);
 		labelPassword.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		labelPassword.setBounds(46, 212, 204, 33);
+		labelPassword.setBounds(46, 282, 204, 33);
 		changingPanel.add(labelPassword);
 
 		JTextField lastName = new JTextField();
 		lastName.setColumns(10);
-		lastName.setBounds(381, 256, 282, 33);
+		lastName.setBounds(584, 227, 350, 33);
 		lastName.setDocument(new JTextFieldCharLimit(20));
 		changingPanel.add(lastName);
 
 		JLabel labelLastName = new JLabel("Last Name:");
 		labelLastName.setForeground(Color.WHITE);
 		labelLastName.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		labelLastName.setBounds(381, 212, 204, 33);
+		labelLastName.setBounds(584, 183, 204, 33);
 		labelLastName.setVisible(true);
 		changingPanel.add(labelLastName);
 
 		JLabel labelPassword2 = new JLabel("Confirm Password:");
 		labelPassword2.setForeground(Color.WHITE);
 		labelPassword2.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		labelPassword2.setBounds(46, 310, 204, 33);
+		labelPassword2.setBounds(46, 380, 204, 33);
 		changingPanel.add(labelPassword2);
 
-		JTextField adresa = new JTextField();
-		adresa.setColumns(10);
-		adresa.setBounds(381, 354, 282, 33);
-		adresa.setDocument(new JTextFieldCharLimit(30));
-		changingPanel.add(adresa);
+		JTextField address = new JTextField();
+		address.setColumns(10);
+		address.setBounds(584, 325, 350, 33);
+		address.setDocument(new JTextFieldCharLimit(30));
+		changingPanel.add(address);
 
-		JLabel labelAdresa = new JLabel("Address:");
-		labelAdresa.setForeground(Color.WHITE);
-		labelAdresa.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		labelAdresa.setBounds(381, 310, 204, 33);
-		changingPanel.add(labelAdresa);
+		JLabel labelAddress = new JLabel("Address:");
+		labelAddress.setForeground(Color.WHITE);
+		labelAddress.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		labelAddress.setBounds(584, 281, 204, 33);
+		changingPanel.add(labelAddress);
 
 		JPasswordField password = new JPasswordField();
-		password.setBounds(46, 256, 282, 33);
+		password.setBounds(46, 326, 350, 33);
 		password.setDocument(new JTextFieldCharLimit(20));
 		changingPanel.add(password);
 
 		JPasswordField password2 = new JPasswordField();
-		password2.setBounds(46, 354, 282, 33);
+		password2.setBounds(46, 424, 350, 33);
 		password2.setDocument(new JTextFieldCharLimit(20));
 		changingPanel.add(password2);
 
 		JLabel labelaLBO = new JLabel("LBO:");
 		labelaLBO.setForeground(Color.WHITE);
 		labelaLBO.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		labelaLBO.setBounds(46, 404, 282, 33);
+		labelaLBO.setBounds(46, 474, 282, 33);
 		changingPanel.add(labelaLBO);
 
 		JTextField LBO = new JTextField();
 		LBO.setColumns(10);
-		LBO.setBounds(46, 448, 282, 33);
+		LBO.setBounds(46, 518, 350, 33);
 		LBO.setDocument(new JTextFieldCharLimit(11));
 		changingPanel.add(LBO);
 
 		JLabel labelPhone = new JLabel("Phone Number:");
 		labelPhone.setForeground(Color.WHITE);
 		labelPhone.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		labelPhone.setBounds(718, 113, 204, 33);
+		labelPhone.setBounds(584, 475, 204, 33);
 		changingPanel.add(labelPhone);
 
 		JTextField phoneNumber = new JTextField();
 		phoneNumber.setColumns(10);
-		phoneNumber.setBounds(718, 157, 282, 33);
+		phoneNumber.setBounds(584, 518, 350, 33);
 		phoneNumber.setDocument(new JTextFieldCharLimit(15));
 		changingPanel.add(phoneNumber);
 
 		JComboBox<String> gender = new JComboBox<String>();
 		gender.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		gender.setModel(new DefaultComboBoxModel<String>(new String[] { "Male", "Female" }));
+		gender.setModel(new DefaultComboBoxModel<String>(new String[] { "male", "female" }));
 		gender.setSelectedIndex(0);
 		gender.setBackground(Color.WHITE);
-		gender.setBounds(381, 446, 282, 33);
+		gender.setBounds(584, 424, 350, 33);
 		changingPanel.add(gender);
 
 		JLabel labelGender = new JLabel("Gender:");
 		labelGender.setForeground(Color.WHITE);
 		labelGender.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		labelGender.setBounds(381, 404, 204, 33);
+		labelGender.setBounds(584, 375, 204, 33);
 		changingPanel.add(labelGender);
 
 		JLabel labelDateOfBirth = new JLabel("Date Of Birth:");
 		labelDateOfBirth.setForeground(Color.WHITE);
 		labelDateOfBirth.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		labelDateOfBirth.setBounds(718, 215, 204, 33);
+		labelDateOfBirth.setBounds(584, 574, 204, 33);
 		changingPanel.add(labelDateOfBirth);
 
 		JCalendar calendar = new JCalendar();
-		calendar.setBounds(718, 259, 282, 153);
+		calendar.setBounds(584, 618, 350, 153);
 		changingPanel.add(calendar);
-		
+
 		if (caseString.equals("VIEW")) {
-			userName.setText(CurrentUser.getCurrentPatient().getUserName()); 
-			name.setText(CurrentUser.getCurrentPatient().getName()); 
-			lastName.setText(CurrentUser.getCurrentPatient().getLastName()); 
-			password.setText(CurrentUser.getCurrentPatient().getPassword()); 
-			password2.setText(CurrentUser.getCurrentPatient().getPassword()); 
-			LBO.setText(CurrentUser.getCurrentPatient().getLBO()); 
-			phoneNumber.setText(CurrentUser.getCurrentPatient().getPhoneNumber()); 
+			userName.setText(CurrentUser.getCurrentPatient().getUserName());
+			name.setText(CurrentUser.getCurrentPatient().getName());
+			lastName.setText(CurrentUser.getCurrentPatient().getLastName());
+			password.setText(CurrentUser.getCurrentPatient().getPassword());
+			password2.setText(CurrentUser.getCurrentPatient().getPassword());
+			LBO.setText(CurrentUser.getCurrentPatient().getLBO());
+			address.setText(CurrentUser.getCurrentPatient().getAddress());
+			phoneNumber.setText(CurrentUser.getCurrentPatient().getPhoneNumber());
 			gender.setSelectedItem(CurrentUser.getCurrentPatient().getGender());
-			calendar.setDate(Date.from(CurrentUser.getCurrentPatient().getDateOfBirth().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			calendar.setDate(Date.from(
+					CurrentUser.getCurrentPatient().getDateOfBirth().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 		}
 
 		JLabel correctData = new JLabel("");
 		correctData.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		correctData.setForeground(Color.CYAN);
-		correctData.setBounds(320, 34, 343, 59);
+		correctData.setBounds(46, 795, 888, 111);
 		changingPanel.add(correctData);
 
 		JPanel panelFinish = new JPanel();
-		panelFinish.setBounds(46, 613, 282, 59);
+		panelFinish.setBounds(46, 704, 350, 67);
 		panelFinish.setLayout(null);
 		panelFinish.addMouseListener(new MouseAdapter() {
 			@Override
@@ -200,80 +209,46 @@ public class PanelSignUp extends JPanel {
 				String LBOString = LBO.getText();
 				String nameString = name.getText();
 				String lastNameString = lastName.getText();
-				String adressString = adresa.getText();
+				String adressString = address.getText();
 				String phoneNumberString = phoneNumber.getText();
 				LocalDate dateOfBirth = calendar.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 				String genderString = gender.getSelectedItem().toString();
-				String validationString = Validations.validationTextForSignUp(userNameString, passwordString, password2String, LBOString, nameString,
-						lastNameString, adressString, phoneNumberString);
-				if (validationString.equals("")) {
-					Patient newPatient = new Patient(LBOString, userNameString, passwordString, nameString, lastNameString, phoneNumberString, adressString,
-							dateOfBirth, genderString, true);
-					Users.listOfPatients.add(newPatient);
-					correctData.setText("You added a patient successfully!");
-					if (CurrentUser.getClassOfTheCurrentUser() == null) {
+				if (caseString.equals("VIEW")) {
+					correctData.setText("Changes have been saved successfully!");
+					Users.removePatient(CurrentUser.getCurrentPatient().getUserName());
+					Users.addPatient(LBOString, userNameString, passwordString, nameString,
+							lastNameString, phoneNumberString, adressString, dateOfBirth, genderString);
+				} else {
+					String validationString = Validations.validationTextForSignUp(userNameString, passwordString,
+							password2String, LBOString, nameString, lastNameString, adressString, phoneNumberString);
+					if (validationString.equals("")) {
+						Users.addPatient(LBOString, userNameString, passwordString, nameString, lastNameString,
+								phoneNumberString, adressString, dateOfBirth, genderString);
 						CurrentUser.setClassOfTheCurrentUser("Patient");
-						CurrentUser.setCurrentPatient(newPatient);
+						CurrentUser.setCurrentPatient(new Patient(LBOString, userNameString, passwordString, nameString,
+								lastNameString, phoneNumberString, adressString, dateOfBirth, genderString, true));
 						correctData.setText("You signed up successfully!");
-						MenuPatient meniPacijent = new MenuPatient();
-						meniPacijent.setVisible(true);
+						MenuPatient meniPatient = new MenuPatient();
+						meniPatient.setVisible(true);
 						SwingUtilities.getWindowAncestor(changingPanel).dispose();
 					} else
-						correctData.setText("You signed up a patient successfully!");
-
-				} else
-					correctData.setText(validationString);
+						correctData.setText(validationString);
+				}
 			}
 		});
 
-		JLabel gotovo = new JLabel("FINISH");
-		gotovo.setForeground(myBlue);
-		gotovo.setFont(new Font("Tahoma", Font.BOLD, 26));
-		gotovo.setHorizontalAlignment(SwingConstants.CENTER);
-		gotovo.setBounds(0, 0, 282, 59);
-		gotovo.setToolTipText("Click here to save registration");
-		panelFinish.add(gotovo);
-		
-		JPanel panelSacuvaj = new JPanel();
-		panelSacuvaj.setBounds(46, 613, 282, 59);
-		panelSacuvaj.setLayout(null);
-		panelSacuvaj.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				String userNameString = userName.getText();
-				String passwordString = new String(password.getPassword());
-				String password2String = new String(password2.getPassword());
-				String LBOString = LBO.getText();
-				String nameString = name.getText();
-				String lastNameString = lastName.getText();
-				String adressString = adresa.getText();
-				String phoneNumberString = phoneNumber.getText();
-				LocalDate dateOfBirth = calendar.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-				String genderString = gender.getSelectedItem().toString();
-				String validationString = Validations.validationTextForSignUp(userNameString, passwordString, password2String, LBOString, nameString,
-						lastNameString, adressString, phoneNumberString);
-				if (validationString.equals("")) {
-					correctData.setText("Changes have been saved successfully!");
-					CurrentUser.getCurrentPatient().updateInfo(LBOString, userNameString, passwordString, nameString, lastNameString, 
-							phoneNumberString, adressString, dateOfBirth, genderString, true);
-				} else
-					correctData.setText(validationString);
-			}
-		});
-		
-		JLabel sacuvaj = new JLabel("SAVE");
-		sacuvaj.setForeground(myBlue);
-		sacuvaj.setFont(new Font("Tahoma", Font.BOLD, 26));
-		sacuvaj.setHorizontalAlignment(SwingConstants.CENTER);
-		sacuvaj.setBounds(0, 0, 282, 59);
-		sacuvaj.setToolTipText("Click here to save changes");
-		panelSacuvaj.add(sacuvaj);
-		
+		JLabel finish = new JLabel();
+		finish.setForeground(myBlue);
+		finish.setFont(new Font("Tahoma", Font.BOLD, 26));
+		finish.setHorizontalAlignment(SwingConstants.CENTER);
+		finish.setBounds(0, 0, 350, 67);
 		if (caseString.equals("VIEW")) {
-			changingPanel.add(panelSacuvaj);
+			finish.setText("SAVE CHANGES");
 		} else {
-			changingPanel.add(panelFinish);
+			finish.setText("FINISH");
 		}
+		panelFinish.add(finish);
+		changingPanel.add(panelFinish);
 
 		return changingPanel;
 	}

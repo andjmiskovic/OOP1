@@ -1,5 +1,18 @@
 package classes;
 
-public enum currentStateOfReport {
-	POČETAK_OBRADE, UZET_UZORAK, OBRADA_NALAZA, GOTOV_NALAZ
+public enum CurrentStateOfRequest {
+	PROCESS_STARTED("start"),
+	SAMPLE_TAKEN("taking samples"),
+	PROCESSING("processing"),
+	FINISHED_REPORT("done");
+	
+	private final String fieldDescription;
+
+    private CurrentStateOfRequest(String value) {
+        fieldDescription = value;
+    }
+
+    public String getName() {
+    	return fieldDescription;
+    }
 }

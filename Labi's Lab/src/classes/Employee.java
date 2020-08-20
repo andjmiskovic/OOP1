@@ -1,38 +1,36 @@
 package classes;
 
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 
 public class Employee extends Person {
-	private double celery, bonus;
-	private int yearsOfService;
-	private LocalDate start;
+	private double celery, bonus, yearsOfService;
+	private Qualification qualification;
 
 	public Employee() {
 		super();
 		this.celery = 0;
 		this.bonus = 0;
-		this.start = LocalDate.now();
 		this.yearsOfService = 0;
 	}
 
 	public Employee(String LBO, String userName, String password, String name, String lastName, String phoneNumber,
-			String adress, LocalDate dateOfBirth, String gender, boolean active, double celery, double bonus,
-			LocalDate start) {
-		super(LBO, userName, password, name, lastName, phoneNumber, adress, dateOfBirth, gender, active);
+			String address, LocalDate dateOfBirth, String gender, boolean active, double celery, double bonus,
+			double yearsOfService, Qualification qualification) {
+		super(LBO, userName, password, name, lastName, phoneNumber, address, dateOfBirth, gender, active);
 		this.celery = celery;
 		this.bonus = bonus;
-		this.start = start;
+		this.yearsOfService = yearsOfService;
+		this.qualification = qualification;
 	}
 
-	public Employee(Person person, double celery, double bonus, LocalDate start) {
+	public Employee(Person person, double celery, double bonus, double yearsOfService, Qualification qualification) {
 		super(person.getLBO(), person.getUserName(), person.getPassword(), person.getName(), person.getLastName(),
-				person.getPhoneNumber(), person.getAdress(), person.getDateOfBirth(), person.getGender(),
+				person.getPhoneNumber(), person.getAddress(), person.getDateOfBirth(), person.getGender(),
 				person.isActive());
 		this.celery = celery;
 		this.bonus = bonus;
-		this.start = start;
+		this.yearsOfService = yearsOfService;
+		this.qualification = qualification;
 	}
 
 	public double getCelery() {
@@ -51,23 +49,35 @@ public class Employee extends Person {
 		this.bonus = bonus;
 	}
 
-	public int getYearsOfService() {
-		Period period = Period.between(this.start, LocalDate.now());
-		this.yearsOfService = period.getYears();
+	public double getYearsOfService() {
 		return this.yearsOfService;
 	}
-
-	public LocalDate getStart() {
-		return start;
+	
+	public void setYearsOfService(double yearsOfService) {
+		this.yearsOfService = yearsOfService;
 	}
 
-	public void setStart(LocalDate start) {
-		this.start = start;
+	public Qualification getQualification() {
+		return qualification;
+	}
+
+	public void setQualification(Qualification qualification) {
+		this.qualification = qualification;
 	}
 
 	public String toString() {
-		return "employee," + super.toString() + "," + String.valueOf(celery) + "," + String.valueOf(bonus) +
-				"," + String.valueOf(yearsOfService) + ","+ start.format(DateTimeFormatter.ofPattern("dd.MM.yy.")) + "\n";
+		return super.toString() + "," + String.valueOf(celery) + "," + String.valueOf(bonus) +
+				"," + String.valueOf(yearsOfService) + "," + qualification.toString();
 	}	
+	
+	public void updateInfo(String LBO, String userName, String password, String name, String lastName, String phoneNumber,
+			String adress, LocalDate dateOfBirth, String gender, boolean active, double celery, double bonus,
+			double yearsOfService, Qualification qualification) {
+		super.updateInfo(LBO, userName, password, name, lastName, phoneNumber, adress, dateOfBirth, gender, active);
+		this.celery = celery;
+		this.bonus = bonus;
+		this.yearsOfService = yearsOfService;
+		this.qualification = qualification;
+	}
 
 }
