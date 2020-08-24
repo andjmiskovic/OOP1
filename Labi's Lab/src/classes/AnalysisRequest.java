@@ -70,6 +70,14 @@ public class AnalysisRequest extends IDObject {
 	public boolean isHomeVisitWithTime() {
 		return homeVisitWithTime;
 	}
+	
+	public Map<Specialization, Chemist> getProcessedGroups() {
+		return processedGroups;
+	}
+
+	public void setProcessedGroups(Map<Specialization, Chemist> processedGroups) {
+		this.processedGroups = processedGroups;
+	}
 
 	public void setHomeVisitWithTime(boolean homeVisitWithTime) {
 		this.homeVisitWithTime = homeVisitWithTime;
@@ -203,7 +211,7 @@ public class AnalysisRequest extends IDObject {
 				localDateToString(processedDate) + ',' +
 				medicalTechnicialUserName + ',' + 
 				specializationMapToString(processedGroups) + ',' +
-				specializationsToString(unprocessedGroups);
+				specializationsToString(unprocessedGroups) + "\n";
 	}
 
 	public int compareTo(AnalysisRequest o) {

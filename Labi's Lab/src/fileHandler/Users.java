@@ -7,9 +7,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import classes.Admin;
 import classes.Chemist;
@@ -84,7 +89,9 @@ public class Users {
 		String adress = metadata[7].trim();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
 		String date = metadata[8].trim();
-		LocalDate dateOfBirth = LocalDate.parse(date, formatter);
+		LocalDate dateOfBirth = null;
+		if (date != "")
+			dateOfBirth = LocalDate.parse(date, formatter);
 		String gender = metadata[9].trim();
 		boolean active = Boolean.parseBoolean(metadata[10].trim());
 		return new Patient(LBO, userName, password, name, lastName, phoneNumber, adress, dateOfBirth, gender, active);
@@ -92,11 +99,11 @@ public class Users {
 
 	private static Chemist createChemist(Employee employee, String[] metadata) {
 		ArrayList<Specialization> arrayListOfSpecializations = new ArrayList<Specialization>();
-		String[] listOfSpecializations = metadata[15].trim().split("|");
+		String[] listOfSpecializations = metadata[15].trim().split("\\|");
 		int numberOfFinishedReports = Integer.parseInt(metadata[16].trim());
 		try {
 			for (String specialization : listOfSpecializations) {
-				arrayListOfSpecializations.add(Specialization.valueOf(specialization.trim()));
+				arrayListOfSpecializations.add(Specialization.fromString(specialization.trim()));
 			}
 			return new Chemist(employee, arrayListOfSpecializations, numberOfFinishedReports);
 		} catch (Exception e) {
@@ -174,6 +181,15 @@ public class Users {
 	public static Patient getPatientByUsername(String username) {
 		for (Patient patient : listOfPatients) {
 			if (patient.getUserName().equals(username)) {
+				return patient;
+			}
+		}
+		return null;
+	}
+
+	public static Patient getPatientByLBO(String LBO) {
+		for (Patient patient : listOfPatients) {
+			if (patient.getLBO().equals(LBO)) {
 				return patient;
 			}
 		}
@@ -315,7 +331,7 @@ public class Users {
 		}
 		return null;
 	}
-	
+
 	public static Employee getEmployeeByUserName(String role, String username) {
 		switch (role.toLowerCase()) {
 		case "admin":
@@ -338,12 +354,46 @@ public class Users {
 		case "chemist":
 			removeChemist(username);
 			break;
-		case "medicialtechnicial":
+		case "medicaltechnicial":
 			removeMedicalTechnicial(username);
 			break;
 		default:
 			break;
 		}
+	}
+
+	public static String newPatientUserName() {
+		return "newPatient" + String.valueOf(listOfPatients.size());
+	}
+
+	public static Map<String, Double> incomesPerEmployeeOccupation(LocalDate start, LocalDate end,
+			ArrayList<DayOfWeek> daysOfWeeks) {
+		double adminCount = 0;
+		double medicalCount = 0;
+		double chemistCount = 0;
+		Map<String, Double> map = new HashMap<String, Double>();
+		int dayCount = countDaysFromTo(start, end, daysOfWeeks);
+		if (dayCount > 0) {
+			for (Admin admin : listOfAdmins)
+				adminCount += admin.getSalary();
+			for (MedicalTechnicial medicalTechnicial : listOfMedicalTechnicials)
+				medicalCount += medicalTechnicial.getSalary();
+			for (Chemist chemist : listofChemists)
+				chemistCount += chemist.getSalary();
+			map.put("Admin", adminCount / dayCount);
+			map.put("Medical Technicial", medicalCount / dayCount);
+			map.put("Chemist", chemistCount / dayCount);
+		} else {
+			map.put("Admin", 0.0);
+			map.put("Medical Technicial", 0.0);
+			map.put("Chemist", 0.0);
+		}
+		return map;
+	}
+
+	private static int countDaysFromTo(LocalDate start, LocalDate end, ArrayList<DayOfWeek> daysOfWeeks) {
+		return (int) Stream.iterate(start, d -> d.plusDays(1)).limit(start.until(end, ChronoUnit.DAYS))
+				.filter(d -> daysOfWeeks.contains(d.getDayOfWeek())).count();
 	}
 
 }

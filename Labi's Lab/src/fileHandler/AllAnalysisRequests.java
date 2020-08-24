@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -73,10 +74,13 @@ public class AllAnalysisRequests {
 		LocalDate processedDate = stringToLocalDate(attributes[10].trim(), formatter);
 		MedicalTechnicial medicalTechnicial = Users.getMedicalTechnicialByUsername(attributes[11].trim());
 		Map<Specialization, Chemist> processedGroups = readSpecializationMap(attributes[12].trim().split("\\|"));
-		ArrayList<Specialization> unprocessedGroups = listOfSpecializations(attributes[13].trim());
+		if (currentState != CurrentStateOfRequest.FINISHED_REPORT)
+			return new AnalysisRequest(id, totalPrice, homeVisit, homeVisitDate, homeVisitWithTime, homeVisitTime,
+					currentState, analyses, patient, requestedDate, processedDate, medicalTechnicial, processedGroups,
+					listOfSpecializations(attributes[13].trim()));
 		return new AnalysisRequest(id, totalPrice, homeVisit, homeVisitDate, homeVisitWithTime, homeVisitTime,
 				currentState, analyses, patient, requestedDate, processedDate, medicalTechnicial, processedGroups,
-				unprocessedGroups);
+				null);
 	}
 
 	public static LocalDate stringToLocalDate(String s, DateTimeFormatter formatter) {
@@ -106,6 +110,15 @@ public class AllAnalysisRequests {
 		return analyses;
 	}
 
+	public static ArrayList<AnalysisRequest> getRequestsWithTakenSamples() {
+		ArrayList<AnalysisRequest> analysisRequests = new ArrayList<AnalysisRequest>();
+		for (AnalysisRequest analysisRequest : listOfRequests) {
+			if (analysisRequest.getCurrentState() == CurrentStateOfRequest.PROCESSING)
+				analysisRequests.add(analysisRequest);
+		}
+		return analysisRequests;
+	}
+
 	public static Map<AnalysisType, Double> readAnalysesTypesMap(String[] listOfPairs) {
 		Map<AnalysisType, Double> map = new HashMap<AnalysisType, Double>();
 		for (String pair : listOfPairs) {
@@ -127,7 +140,7 @@ public class AllAnalysisRequests {
 		for (String pair : listOfPairs) {
 			if (!pair.isEmpty()) {
 				String[] arr = pair.split(":", 0);
-				Specialization key = Specialization.valueOf(arr[0].trim());
+				Specialization key = Specialization.fromString(arr[0].trim());
 				Chemist value = Users.getChemistByUsername(arr[1].trim());
 				map.put(key, value);
 			}
@@ -185,18 +198,161 @@ public class AllAnalysisRequests {
 	public static double calculateRequestPriceWithtDiscount(ArrayList<AnalysisType> analysisTypes, LocalDate date,
 			boolean time) {
 		double price = 0;
+		Map<Specialization, Double> spendPerSpecialization = new HashMap<Specialization, Double>();
+		Map<Specialization, Integer> numberOfAnalysisPerSpecialization = new HashMap<Specialization, Integer>();
+		for (Specialization specialization : Specialization.values()) {
+			spendPerSpecialization.put(specialization, 0.0);
+			numberOfAnalysisPerSpecialization.put(specialization, 0);
+		}
 		if (date != null)
 			price += SalaryCoefficients.salaryCoefficient.getHomeVisit();
 		if (time)
 			price += SalaryCoefficients.salaryCoefficient.getHomeVisitWithTime();
-		for (AnalysisType analysisType : analysisTypes)
-			price += AllAnalysisTypes.getAnalysisTypePriceWithDiscount(analysisType, date);
+		for (AnalysisType analysisType : analysisTypes) {
+			spendPerSpecialization.put(analysisType.getGroup(),
+					spendPerSpecialization.get(analysisType.getGroup()) + analysisType.getPrice());
+			numberOfAnalysisPerSpecialization.put(analysisType.getGroup(),
+					numberOfAnalysisPerSpecialization.get(analysisType.getGroup()) + 1);
+		}
+		for (AnalysisType analysisType : analysisTypes) {
+			double discount = 1;
+			boolean groupDiscount = false;
+			Specialization specialization = analysisType.getGroup();
+			if (analysisType.getGroupDiscount() != null) {
+				if (numberOfAnalysisPerSpecialization.get(specialization) > 2)
+					groupDiscount = true;
+			}
+			if (spendPerSpecialization.get(specialization) >= SalaryCoefficients.groupDiscountLimits
+					.get(specialization))
+				discount *= 0.95;
+			price += AllAnalysisTypes.getAnalysisTypePriceWithDiscount(analysisType, date, groupDiscount) * discount;
+		}
+		return price;
+	}
+
+	public static Map<Specialization, Double> incomesPerSpecialization(LocalDate start, LocalDate end,
+			ArrayList<Specialization> selectedSpecialization, ArrayList<DayOfWeek> daysOfWeeks, boolean homeVisit,
+			int numberOfAnalysis, CurrentStateOfRequest currentStateOfRequest) {
+		Map<Specialization, Double> map = new HashMap<Specialization, Double>();
+		for (Specialization specialization : selectedSpecialization)
+			map.put(specialization, 0.0);
+		for (AnalysisRequest analysisRequest : listOfRequests) {
+			if (analysisRequest.getRequestedDate().isAfter(start) & analysisRequest.getRequestedDate().isBefore(end)) {
+				if (analysisRequest.isHomeVisit() == homeVisit) {
+					if (analysisRequest.getCurrentState() == currentStateOfRequest) {
+						if (analysisRequest.getAnalyses().size() >= numberOfAnalysis) {
+							for (AnalysisType analysisType : analysisRequest.getAnalyses().keySet()) {
+								Specialization specialization = analysisType.getGroup();
+								if (map.containsKey(specialization)) {
+									double value = map.get(specialization)
+											+ analysisPriceWithinRequest(analysisRequest, analysisType);
+									map.put(specialization, value);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return map;
+	}
+
+	public static ArrayList<AnalysisRequest> filterAnalysisRequests(LocalDate start, LocalDate end,
+			ArrayList<Specialization> selectedSpecialization, ArrayList<DayOfWeek> daysOfWeeks, boolean homeVisit,
+			int numberOfAnalysis, CurrentStateOfRequest currentStateOfRequest) {
+		ArrayList<AnalysisRequest> map = new ArrayList<AnalysisRequest>();
+		for (AnalysisRequest analysisRequest : listOfRequests) {
+			if (analysisRequest.getRequestedDate().isAfter(start) & analysisRequest.getRequestedDate().isBefore(end)) {
+				if (analysisRequest.isHomeVisit() == homeVisit) {
+					if (analysisRequest.getCurrentState() == currentStateOfRequest) {
+						if (analysisRequest.getAnalyses().size() >= numberOfAnalysis) {
+							for (AnalysisType analysisType : analysisRequest.getAnalyses().keySet()) {
+								if (selectedSpecialization.contains(analysisType.getGroup())) {
+									map.add(analysisRequest);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return map;
+	}
+
+	public static double analysisPriceWithinRequest(AnalysisRequest analysisRequest, AnalysisType analysisType) {
+		LocalDate requestedDate = analysisRequest.getRequestedDate();
+		double price = AllAnalysisTypes.getAnalysisTypePriceWithDiscount(analysisType, requestedDate, false);
+		Specialization specialization = analysisType.getGroup();
+		double specializationLimit = 0;
+		int numberOfAnalysisWithinSpecialization = 0;
+		for (AnalysisType analysisType2 : analysisRequest.getAnalyses().keySet()) {
+			if (analysisType2.getGroup() == specialization) {
+				specializationLimit += analysisType2.getPrice();
+				numberOfAnalysisWithinSpecialization += 1;
+			}
+		}
+		if (specializationLimit >= SalaryCoefficients.groupDiscountLimits.get(specialization))
+			price *= 0.95;
+		if (analysisType.getGroupDiscount() != null) {
+			if (numberOfAnalysisWithinSpecialization > 2) {
+				if (requestedDate.isAfter(analysisType.getGroupDiscount().getStartDate())) {
+					if (requestedDate.isBefore(analysisType.getGroupDiscount().getEndDate())) {
+						price *= analysisType.getGroupDiscount().getValue();
+					}
+				}
+			}
+		}
 		return price;
 	}
 
 	public static void addAnalysisRequest(AnalysisRequest analysisRequest) {
 		listOfRequests.add(analysisRequest);
 		saveData();
+	}
+
+	public static void setMedicalTechnicial(String id, MedicalTechnicial medicalTechnicial) {
+		for (AnalysisRequest analysisRequest : listOfRequests) {
+			if (analysisRequest.getId().equals(id)) {
+				analysisRequest.setMedicalTechnicial(medicalTechnicial);
+				analysisRequest.setCurrentState(CurrentStateOfRequest.SAMPLE_TAKING);
+				medicalTechnicial.setNumberOfHouseVisits(medicalTechnicial.getNumberOfHouseVisits() + 1);
+				saveData();
+				return;
+			}
+		}
+	}
+
+	public static void setSampleTaken(String id) {
+		for (AnalysisRequest analysisRequest : listOfRequests) {
+			if (analysisRequest.getId().equals(id)) {
+				analysisRequest.setCurrentState(CurrentStateOfRequest.PROCESSING);
+				saveData();
+				return;
+			}
+		}
+	}
+
+	public static Map<String, Integer> numberOfAnalysesByTypeAndSex(AnalysisType analysis, LocalDate startDate,
+			LocalDate endDate, int startAge, int endAge) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		int male = 0;
+		int female = 0;
+		for (AnalysisRequest analysisRequest : listOfRequests) {
+			LocalDate requestedDate = analysisRequest.getRequestedDate();
+			if (requestedDate.isAfter(startDate) & requestedDate.isBefore(endDate)) {
+				int patientsAge = analysisRequest.getPatient().getAge();
+				if (endAge >= patientsAge & patientsAge >= startAge) {
+					if (analysisRequest.getPatient().getGender().toLowerCase().equals("male"))
+						male += 1;
+					else
+						female += 1;
+				}
+			}
+		}
+		map.put("male", male);
+		map.put("female", female);
+		return map;
 	}
 
 	public static void saveData() {
@@ -223,6 +379,45 @@ public class AllAnalysisRequests {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static int getNumberOfRequestsByPatientInTime(Patient patient, ArrayList<DayOfWeek> days, LocalDate start,
+			LocalDate end) {
+		int number = 0;
+		for (AnalysisRequest analysisRequest : listOfRequests) {
+			if (analysisRequest.getRequestedDate().isBefore(end) & analysisRequest.getRequestedDate().isAfter(start)) {
+				if (analysisRequest.getPatient() == patient) {
+					number += 1;
+				}
+			}
+		}
+		return number;
+	}
+
+	public static ArrayList<AnalysisRequest> getRequestsByPatientInTime(Patient patient, ArrayList<DayOfWeek> days,
+			LocalDate start, LocalDate end) {
+		ArrayList<AnalysisRequest> analysisRequests = new ArrayList<AnalysisRequest>();
+		for (AnalysisRequest analysisRequest : listOfRequests) {
+			if (analysisRequest.getPatient() == patient) {
+				if (analysisRequest.getRequestedDate().isBefore(end)
+						& analysisRequest.getRequestedDate().isAfter(start)) {
+					analysisRequests.add(analysisRequest);
+				}
+			}
+		}
+		return analysisRequests;
+	}
+
+	public static double getTotalPriceOfRequestsByGroupByPatient(ArrayList<Specialization> group, Patient patient,
+			ArrayList<DayOfWeek> days, LocalDate start, LocalDate end) {
+		double price = 0;
+		for (AnalysisRequest analysisRequest : getRequestsByPatientInTime(patient, days, start, end)) {
+			for (AnalysisType analysisType : analysisRequest.getAnalyses().keySet()) {
+				if (group.contains(analysisType.getGroup()))
+					price += analysisPriceWithinRequest(analysisRequest, analysisType);
+			}
+		}
+		return price;
 	}
 
 }

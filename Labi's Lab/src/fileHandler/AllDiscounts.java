@@ -68,6 +68,8 @@ public class AllDiscounts {
 	}
 
 	public static Discount getDiscountById(String id) {
+		if (id.equals(""))
+			return null;
 		for (Discount discount : listOfDiscounts) {
 			if (discount.getId().equals(id)) {
 				return discount;

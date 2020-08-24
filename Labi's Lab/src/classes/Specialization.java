@@ -3,9 +3,16 @@ package classes;
 import java.util.stream.Stream;
 
 public enum Specialization {
-	Alergology("ALERGOLOGY"), Biochemistry("BIOCHEMISTRY"), Hematology("HEMATOLOGY"), Immunology("IMMUNOLOGY"),
-	Drugs("DRUGS"), Immunochemistry("IMMUNOCHEMISTRY"), Transfusiology("TRANSFUSIOLOGY"), Serology("SEROLOGY"),
-	Microbiology("MICROBIOLOGY"), Genetics("GENETICS");
+	Alergology("ALERGOLOGY"), 
+	Biochemistry("BIOCHEMISTRY"), 
+	Drugs("DRUGS"), 
+	Genetics("GENETICS"),
+	Hematology("HEMATOLOGY"), 
+	Immunology("IMMUNOLOGY"),
+	Immunochemistry("IMMUNOCHEMISTRY"), 
+	Microbiology("MICROBIOLOGY"),
+	Serology("SEROLOGY"),
+	Transfusiology("TRANSFUSIOLOGY"); 
 
 	private final String fieldDescription;
 
@@ -19,9 +26,8 @@ public enum Specialization {
 	
     public static Specialization fromString(String text) {
         for (Specialization b : Specialization.values()) {
-            if (b.getName().equalsIgnoreCase(text)) {
+            if (b.getName().equalsIgnoreCase(text)) 
                 return b;
-            }
         }
         return null;
     }

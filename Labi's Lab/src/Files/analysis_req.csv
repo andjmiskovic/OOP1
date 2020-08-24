@@ -1,1 +1,6 @@
-1,300.0,false, ,false, ,PROCESS_STARTED,Trigliceridi:null,p,19.08.2020., , ,,MICROBIOLOGY
+2,300.0,false, ,false, ,PROCESSING,Trigliceridi:6.0,p,19.08.2020., ,m,,MICROBIOLOGY
+3,2300.0,false, ,false, ,SAMPLE_TAKING,K:null|boranija:null,p,20.07.2020., ,m,,BIOCHEMISTRY|ALERGOLOGY
+4,2300.0,false, ,false, ,SAMPLE_TAKING,K:null|boranija:null,p,21.08.2020., ,m,,BIOCHEMISTRY|ALERGOLOGY
+5,2300.0,false, ,false, ,SAMPLE_TAKING,K:null|boranija:null,p,22.08.2020., ,m,,BIOCHEMISTRY|ALERGOLOGY
+1,300.0,false, ,false, ,FINISHED_REPORT,Trigliceridi:2.2333793658183665,p,19.08.2020.,23.08.2020.,m,MICROBIOLOGY:c,
+6,9400.0,false, ,false, ,PROCESSING,covid-19 test:null|Trigliceridi:null|boranija:null,newPatient1,23.08.2020., ,m,,BIOCHEMISTRY|MICROBIOLOGY|ALERGOLOGY

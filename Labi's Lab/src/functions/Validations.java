@@ -16,6 +16,18 @@ public class Validations {
 		return true;
 	}
 	
+	public static boolean isNumeric(String strNum) {
+	    if (strNum == null) {
+	        return false;
+	    }
+	    try {
+	        Double.parseDouble(strNum);
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
+	
 	public static boolean valideUserName(String UserName) {
 		if (!valideName(UserName))
 			return false;
@@ -25,9 +37,7 @@ public class Validations {
 	}
 
 	public static boolean valideLBO(String LBO) {
-		Pattern pattern = Pattern.compile("0123456789");
-		Matcher matcher = pattern.matcher(LBO);
-		if (matcher.matches())
+		if (isNumeric(LBO))
 			return false;
 		if (LBO.length() != 11)
 			return false;

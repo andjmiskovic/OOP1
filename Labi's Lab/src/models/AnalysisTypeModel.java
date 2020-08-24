@@ -1,5 +1,6 @@
 package models;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -10,12 +11,12 @@ import javax.swing.table.AbstractTableModel;
 import classes.AnalysisType;
 import fileHandler.AllAnalysisTypes;
 
-public class AnalysisRequestModel extends AbstractTableModel {
+public class AnalysisTypeModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 	private ArrayList<AnalysisType> analysisTypes;
-	private String[] columnNames = { "name", "group", "description", "price" };
+	private String[] columnNames = { "name", "group", "description", "price with type discount" };
 
-	public AnalysisRequestModel(ArrayList<AnalysisType> analysisTypes) {
+	public AnalysisTypeModel(ArrayList<AnalysisType> analysisTypes) {
 		this.analysisTypes = analysisTypes;
 	}
 
@@ -40,7 +41,7 @@ public class AnalysisRequestModel extends AbstractTableModel {
 		case 2:
 			return analysisType.getDescription();
 		case 3:
-			return analysisType.getPrice();
+			return AllAnalysisTypes.getAnalysisTypePriceWithDiscount(analysisType, LocalDate.now(), false);
 		default:
 			return null;
 		}

@@ -2,7 +2,7 @@ package classes;
 
 public enum CurrentStateOfRequest {
 	PROCESS_STARTED("start"),
-	SAMPLE_TAKEN("taking samples"),
+	SAMPLE_TAKING("taking samples"),
 	PROCESSING("processing"),
 	FINISHED_REPORT("done");
 	

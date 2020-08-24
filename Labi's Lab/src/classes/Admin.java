@@ -18,7 +18,7 @@ public class Admin extends Employee {
 	public Admin(Employee employee) {
 		super(employee.getLBO(), employee.getUserName(), employee.getPassword(), employee.getName(),
 				employee.getLastName(), employee.getPhoneNumber(), employee.getAddress(), employee.getDateOfBirth(),
-				employee.getGender(), employee.isActive(), employee.getCelery(), employee.getBonus(),
+				employee.getGender(), employee.isActive(), employee.getSalary(), employee.getBonus(),
 				employee.getYearsOfService(), employee.getQualification());
 	}
 

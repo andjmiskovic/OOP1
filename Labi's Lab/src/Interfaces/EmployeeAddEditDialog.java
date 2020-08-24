@@ -55,13 +55,13 @@ public class EmployeeAddEditDialog extends JDialog {
 
 	private void initGUI(String role) {
 		MigLayout ml = new MigLayout("wrap 3", "[][][]", "[]10[]10[]10[]20[]");
-		setLayout(ml);
+		getContentPane().setLayout(ml);
 
 		ArrayList<Checkbox> specializationCheckBoxes = new ArrayList<>();
 		JSpinner numberOfFinishedReports = new JSpinner(new SpinnerNumberModel(0, 0, 1000, 1));
 		numberOfFinishedReports.setEnabled(false);
 
-		add(new JLabel("Role"));
+		getContentPane().add(new JLabel("Role"));
 		JComboBox<String> cmbRole = new JComboBox<String>();
 		cmbRole.addItem("Admin");
 		cmbRole.addItem("Chemist");
@@ -81,75 +81,70 @@ public class EmployeeAddEditDialog extends JDialog {
 				}
 			}
 		});
-		add(cmbRole, "span 2");
+		getContentPane().add(cmbRole, "span 2, grow");
 
-		add(new JLabel("Username"));
+		getContentPane().add(new JLabel("Username"));
 		JTextField txtUsername = new JTextField(20);
 		txtUsername.setDocument(new JTextFieldCharLimit(20));
-		add(txtUsername, "span 2");
+		getContentPane().add(txtUsername, "span 2");
 
-		add(new JLabel("Password"));
+		getContentPane().add(new JLabel("Password"));
 		JTextField txtPassword = new JTextField(20);
 		txtPassword.setDocument(new JTextFieldCharLimit(20));
-		add(txtPassword, "span 2");
+		getContentPane().add(txtPassword, "span 2");
 
-		add(new JLabel("Name"));
+		getContentPane().add(new JLabel("Name"));
 		JTextField txtName = new JTextField(20);
 		txtName.setDocument(new JTextFieldCharLimit(20));
-		add(txtName, "span 2");
+		getContentPane().add(txtName, "span 2");
 
-		add(new JLabel("Last Name"));
+		getContentPane().add(new JLabel("Last Name"));
 		JTextField txtLastName = new JTextField(20);
 		txtLastName.setDocument(new JTextFieldCharLimit(20));
-		add(txtLastName, "span 2");
+		getContentPane().add(txtLastName, "span 2");
 
-		add(new JLabel("Qualification"));
+		getContentPane().add(new JLabel("Qualification"));
 		JComboBox<String> cmbQualification = new JComboBox<String>();
 		for (Qualification qualification : Qualification.values()) {
 			cmbQualification.addItem(qualification.getName());
 		}
-		add(cmbQualification, "span 2");
+		getContentPane().add(cmbQualification, "span 2, grow");
 
-		add(new JLabel("Phone Number"));
+		getContentPane().add(new JLabel("Phone Number"));
 		JTextField txtPhoneNumber = new JTextField(20);
 		txtPhoneNumber.setDocument(new JTextFieldCharLimit(20));
-		add(txtPhoneNumber, "span 2");
+		getContentPane().add(txtPhoneNumber, "span 2");
 
-		add(new JLabel("Date of Birth"));
+		getContentPane().add(new JLabel("Date of Birth"));
 		JDateChooser dateOfBirth = new JDateChooser();
-		dateOfBirth.setMinSelectableDate(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH));
-		add(dateOfBirth, "span 2, grow");
+		dateOfBirth.setMaxSelectableDate(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH));
+		getContentPane().add(dateOfBirth, "span 2, grow");
 
-		add(new JLabel("Address"));
+		getContentPane().add(new JLabel("Address"));
 		JTextField txtAddress = new JTextField(20);
 		txtAddress.setDocument(new JTextFieldCharLimit(20));
-		add(txtAddress, "span 2");
+		getContentPane().add(txtAddress, "span 2");
 
-		add(new JLabel("Gender"));
+		getContentPane().add(new JLabel("Gender"));
 		JComboBox<String> genderBox = new JComboBox<String>();
 		genderBox.addItem("male");
 		genderBox.addItem("female");
-		add(genderBox, "span 2");
+		getContentPane().add(genderBox, "span 2, grow");
 
-		add(new JLabel("LBO"));
+		getContentPane().add(new JLabel("LBO"));
 		JTextField txtLBO = new JTextField(20);
 		txtLBO.setDocument(new JTextFieldCharLimit(11));
-		add(txtLBO, "span 2");
+		getContentPane().add(txtLBO, "span 2");
 
-		add(new JLabel("Bonus"));
-		JTextField txtBonus = new JTextField(20);
-		txtBonus.setDocument(new JTextFieldCharLimit(20));
-		add(txtBonus, "span 2");
-
-		add(new JLabel("Years of service"));
+		getContentPane().add(new JLabel("Years of service"));
 		JSpinner yearsOfService = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
-		add(yearsOfService, "span 2");
+		getContentPane().add(yearsOfService, "spanx 2,grow");
 
-		add(new JLabel("Number of Finished Reports"));
-		add(numberOfFinishedReports, "span 2");
+		getContentPane().add(new JLabel("Number of Finished Reports"));
+		getContentPane().add(numberOfFinishedReports, "span 2, grow");
 
 		JPanel specializationsPanel = new JPanel(new MigLayout());
-		add(new JLabel("Specializations"), "span 2");
+		getContentPane().add(new JLabel("Specializations"), "span 2");
 
 		for (classes.Specialization specialization : classes.Specialization.values()) {
 			Checkbox specializationCheckBox = new Checkbox(specialization.toString());
@@ -157,14 +152,14 @@ public class EmployeeAddEditDialog extends JDialog {
 			specializationCheckBoxes.add(specializationCheckBox);
 			specializationsPanel.add(specializationCheckBox, "wrap");
 		}
-		add(specializationsPanel, "wrap");
-		add(new JLabel());
+		getContentPane().add(specializationsPanel, "wrap");
+		getContentPane().add(new JLabel());
 
 		JButton btnCancel = new JButton("Cancel");
-		add(btnCancel);
+		getContentPane().add(btnCancel);
 
 		JButton btnOK = new JButton("OK");
-		add(btnOK);
+		getContentPane().add(btnOK);
 
 		if (employee != null) {
 			txtUsername.setText(employee.getUserName() + "");
@@ -176,7 +171,6 @@ public class EmployeeAddEditDialog extends JDialog {
 			cmbQualification.setSelectedItem(employee.getQualification().toString());
 			cmbRole.setSelectedItem(employee.getClass().getSimpleName().toString());
 			dateOfBirth.setDate(Date.from(employee.getDateOfBirth().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-			txtBonus.setText(String.valueOf(employee.getBonus()));
 			txtLBO.setText(employee.getLBO());
 			if (cmbRole.getSelectedItem().toString().equals("Chemist")) {
 				numberOfFinishedReports.setValue(((Chemist) employee).getNumberOfFinishedReports());
@@ -212,20 +206,19 @@ public class EmployeeAddEditDialog extends JDialog {
 					LocalDate dateOfBirthString = dateOfBirth.getDate().toInstant().atZone(ZoneId.systemDefault())
 							.toLocalDate();
 					String LBO = txtLBO.getText();
-					double bonus = Double.valueOf(txtBonus.getText());
-					int yos = (int) yearsOfService.getValue();
+					int yos = (Integer) yearsOfService.getValue();
 					String genderString = genderBox.getSelectedItem().toString();
 					if (employee != null) {
 						switch (roleString.toLowerCase()) {
 						case "admin":
 							Users.removeAdmin(employee.getUserName());
 							Users.addAdmin(LBO, usernameString, passwordString, nameString, lastnameString,
-									phoneNumberString, addressString, dateOfBirthString, genderString, 0, bonus, yos,
+									phoneNumberString, addressString, dateOfBirthString, genderString, 0, 0, yos,
 									qualificationString);
 							dispose();
 							break;
 						case "chemist":
-							ArrayList<classes.Specialization> specializations = new ArrayList<classes.Specialization>();
+							ArrayList<Specialization> specializations = new ArrayList<Specialization>();
 							for (Checkbox specializationCheckBox : specializationCheckBoxes) {
 								if (specializationCheckBox.getState()) {
 									specializations.add(Specialization.fromString(specializationCheckBox.getLabel()));
@@ -233,14 +226,14 @@ public class EmployeeAddEditDialog extends JDialog {
 							}
 							Users.removeChemist(employee.getUserName());
 							Users.addChemist(LBO, usernameString, passwordString, nameString, lastnameString,
-									phoneNumberString, addressString, dateOfBirthString, genderString, 0, bonus, yos,
-									qualificationString, specializations, (int) numberOfFinishedReports.getValue());
+									phoneNumberString, addressString, dateOfBirthString, genderString, 0, 0, yos,
+									qualificationString, specializations, (Integer) numberOfFinishedReports.getValue());
 							dispose();
 							break;
-						case "medicaltechnicial":
+						case "medical technicial":
 							Users.removeMedicalTechnicial(employee.getUserName());
 							Users.addMedicalTechnicial(LBO, usernameString, passwordString, nameString, lastnameString,
-									phoneNumberString, addressString, dateOfBirthString, genderString, 0, bonus, yos,
+									phoneNumberString, addressString, dateOfBirthString, genderString, 0, 0, yos,
 									qualificationString);
 							dispose();
 							break;
@@ -253,7 +246,7 @@ public class EmployeeAddEditDialog extends JDialog {
 								switch (roleString.toLowerCase()) {
 								case "admin":
 									Users.addAdmin(LBO, usernameString, passwordString, nameString, lastnameString,
-											phoneNumberString, addressString, dateOfBirthString, genderString, 0, bonus,
+											phoneNumberString, addressString, dateOfBirthString, genderString, 0, 0,
 											yos, qualificationString);
 									dispose();
 									break;
@@ -261,20 +254,20 @@ public class EmployeeAddEditDialog extends JDialog {
 									ArrayList<classes.Specialization> specializations = new ArrayList<classes.Specialization>();
 									for (Checkbox specializationCheckBox : specializationCheckBoxes) {
 										if (specializationCheckBox.getState()) {
-											specializations.add(Specialization
-													.fromString(specializationCheckBox.getName().toString()));
+											specializations
+													.add(Specialization.fromString(specializationCheckBox.getLabel()));
 										}
 									}
 									Users.addChemist(LBO, usernameString, passwordString, nameString, lastnameString,
-											phoneNumberString, addressString, dateOfBirthString, genderString, 0, bonus,
+											phoneNumberString, addressString, dateOfBirthString, genderString, 0, 0,
 											yos, qualificationString, specializations,
 											(int) numberOfFinishedReports.getValue());
 									dispose();
 									break;
-								case "medicaltechnicial":
+								case "medical technicial":
 									Users.addMedicalTechnicial(LBO, usernameString, passwordString, nameString,
 											lastnameString, phoneNumberString, addressString, dateOfBirthString,
-											genderString, 0, bonus, yos, qualificationString);
+											genderString, 0, 0, yos, qualificationString);
 									dispose();
 									break;
 								default:

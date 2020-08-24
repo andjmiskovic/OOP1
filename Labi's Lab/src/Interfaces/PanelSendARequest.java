@@ -15,6 +15,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,10 +30,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
 import javax.swing.SpinnerDateModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -49,7 +56,7 @@ import fileHandler.AllAnalysisRequests;
 import fileHandler.AllAnalysisTypes;
 import fileHandler.SalaryCoefficients;
 import models.AnalysisRecommendationModel;
-import models.AnalysisRequestModel;
+import models.AnalysisTypeModel;
 import net.miginfocom.swing.MigLayout;
 
 public class PanelSendARequest extends JPanel {
@@ -63,7 +70,6 @@ public class PanelSendARequest extends JPanel {
 
 	public PanelSendARequest() {
 		setUp();
-
 	}
 
 	public static void setUp() {
@@ -83,11 +89,22 @@ public class PanelSendARequest extends JPanel {
 		icon.setBounds(75, 51, 70, 70);
 		changingPanel.add(icon);
 
-		table = new JTable(new AnalysisRequestModel(AllAnalysisTypes.listOfAnalysisTypes));
+		table = new JTable(new AnalysisTypeModel(AllAnalysisTypes.listOfAnalysisTypes));
 		table.setBackground(Color.WHITE);
 		table.setRowSelectionAllowed(true);
+		TableRowSorter<AbstractTableModel> tableSorter = new TableRowSorter<AbstractTableModel>();
+		tableSorter.setModel((AbstractTableModel) table.getModel());
+		table.setRowSorter(tableSorter);
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		table.setForeground(myBlue);
+		table.getTableHeader().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int index = table.getTableHeader().columnAtPoint(arg0.getPoint());
+				sort(index);
+				refreshTable();
+			}
+		});
 
 		JPanel panelTable = new JPanel();
 		panelTable.setBackground(Color.WHITE);
@@ -96,9 +113,39 @@ public class PanelSendARequest extends JPanel {
 		panelTable.add(new JScrollPane(table), BorderLayout.CENTER);
 		changingPanel.add(panelTable);
 
-		// ne valja
+		JPanel pSearch = new JPanel();
+		pSearch.setBackground(Color.WHITE);
+		pSearch.add(new JLabel("Search:"));
+		JTextField tfSearch = new JTextField(20);
+		pSearch.add(tfSearch);
+		panelTable.add(pSearch, BorderLayout.SOUTH);
+		panelTable.add(new JScrollPane(table), BorderLayout.CENTER);
+		changingPanel.add(panelTable);
+
+		tfSearch.getDocument().addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				if (tfSearch.getText().trim().length() == 0) {
+					tableSorter.setRowFilter(null);
+				} else {
+					tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + tfSearch.getText().trim()));
+				}
+			}
+		});
+
 		tableRecommendation = new JTable(
-				new AnalysisRecommendationModel(new ArrayList<Map.Entry<AnalysisType, Double>>()));
+				new AnalysisRecommendationModel(recommendedAnaysisTypes(CurrentUser.getCurrentPatient())));
 		tableRecommendation.setBackground(Color.WHITE);
 		tableRecommendation.setForeground(myBlue);
 
@@ -116,7 +163,7 @@ public class PanelSendARequest extends JPanel {
 		lblNewLabel.setBounds(50, 485, 777, 36);
 		changingPanel.add(lblNewLabel);
 
-		JLabel lblSelectAnalysisYou = new JLabel("Select analysis you want ");
+		JLabel lblSelectAnalysisYou = new JLabel("Choose the analyses you want (press and hold Ctrl for more) ");
 		lblSelectAnalysisYou.setForeground(Color.WHITE);
 		lblSelectAnalysisYou.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblSelectAnalysisYou.setBounds(50, 132, 777, 36);
@@ -195,9 +242,8 @@ public class PanelSendARequest extends JPanel {
 					totalPrice = AllAnalysisRequests.calculateRequestPriceWithtDiscount(analysisTypes, requestedDate,
 							homeVisitWithTime.isSelected());
 					price.setText(priceFormat.format(totalPrice));
-				} else {
+				} else
 					price.setText("0 RSD");
-				}
 			}
 		});
 
@@ -262,9 +308,11 @@ public class PanelSendARequest extends JPanel {
 					LocalTime homeVisitTime = null;
 					LocalDate homeVisitDate = null;
 					if (homeVisit.isSelected()) {
-						homeVisitDate = LocalDate.parse(startDate.getDate().toString(), DateTimeFormatter.ofPattern("dd.MM.yyyy."));
+						homeVisitDate = LocalDate.parse(startDate.getDate().toString(),
+								DateTimeFormatter.ofPattern("dd.MM.yyyy."));
 						if (homeVisitWithTime.isSelected()) {
-							homeVisitTime = LocalTime.parse(time.getValue().toString(), DateTimeFormatter.ofPattern("HH:MM"));
+							homeVisitTime = LocalTime.parse(time.getValue().toString(),
+									DateTimeFormatter.ofPattern("HH:MM"));
 						}
 					}
 					int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to send this request?",
@@ -272,10 +320,11 @@ public class PanelSendARequest extends JPanel {
 					if (choice == JOptionPane.YES_OPTION) {
 						AnalysisRequest analysisRequest = new AnalysisRequest(
 								String.valueOf(AllAnalysisRequests.listOfRequests.size() + 1),
-								Double.valueOf(price.getText().replace(" RSD", "")), homeVisit.isSelected(),homeVisitDate,
-								homeVisitWithTime.isSelected(), homeVisitTime, CurrentStateOfRequest.PROCESS_STARTED,
-								analysisTypes, CurrentUser.getCurrentPatient(), LocalDate.now(), null, null,
-								new HashMap<Specialization, Chemist>(), getAllSpecializations(analysisTypes));
+								Double.valueOf(price.getText().replace(" RSD", "")), homeVisit.isSelected(),
+								homeVisitDate, homeVisitWithTime.isSelected(), homeVisitTime,
+								CurrentStateOfRequest.PROCESS_STARTED, analysisTypes, CurrentUser.getCurrentPatient(),
+								LocalDate.now(), null, null, new HashMap<Specialization, Chemist>(),
+								getAllSpecializations(analysisTypes));
 						AllAnalysisRequests.addAnalysisRequest(analysisRequest);
 						refreshTable();
 					}
@@ -311,9 +360,10 @@ public class PanelSendARequest extends JPanel {
 				.getLastTwoAnalysisRequestsByPatient(patient);
 		for (AnalysisRequest analysisRequest : lastTwoAnalysisRequests) {
 			for (Map.Entry<AnalysisType, Double> entry : analysisRequest.getAnalyses().entrySet()) {
-				if (entry.getValue() < entry.getKey().getLowerBound()
-						|| entry.getValue() < entry.getKey().getUpperBound()) {
-					list.add(entry);
+				if (entry.getValue() != null) {
+					if (entry.getValue() < entry.getKey().getLowerBound()
+							| entry.getValue() > entry.getKey().getUpperBound())
+						list.add(entry);
 				}
 			}
 		}
@@ -321,14 +371,52 @@ public class PanelSendARequest extends JPanel {
 	}
 
 	public static void refreshTable() {
-		AnalysisRequestModel analysisRequestModel = (AnalysisRequestModel) table.getModel();
+		AnalysisTypeModel analysisRequestModel = (AnalysisTypeModel) table.getModel();
 		analysisRequestModel.fireTableDataChanged();
 		table.repaint();
 	}
 
-	public static void refreshRecommendationTable() {
-		AnalysisRecommendationModel analysisRequestModel = (AnalysisRecommendationModel) tableRecommendation.getModel();
-		analysisRequestModel.fireTableDataChanged();
-		tableRecommendation.repaint();
+	public static void sort(int index) {
+		Map<Integer, Integer> sortOrder = new HashMap<Integer, Integer>() {
+			private static final long serialVersionUID = 1L;
+			{
+				put(0, 1);
+				put(1, 1);
+				put(2, 1);
+				put(3, 1);
+			}
+		};
+		AllAnalysisTypes.listOfAnalysisTypes.sort(new Comparator<AnalysisType>() {
+			int retVal = 0;
+
+			@Override
+			public int compare(AnalysisType o1, AnalysisType o2) {
+				switch (index) {
+				case 0:
+					retVal = o1.getName().compareTo(o2.getName());
+					break;
+				case 1:
+					retVal = o1.getGroup().compareTo(o2.getGroup());
+					break;
+				case 2:
+					retVal = o1.getDescription().compareTo(o2.getDescription());
+					break;
+				case 3:
+					retVal = (int) (o1.getGroupDiscount().getValue() - o2.getGroupDiscount().getValue());
+					break;
+				default:
+					System.exit(1);
+					break;
+				}
+				return retVal * sortOrder.get(index);
+			}
+		});
+		sortOrder.put(index, sortOrder.get(index) * -1);
 	}
+
+//	public static void refreshRecommendationTable() {
+//		AnalysisRecommendationModel analysisRequestModel = (AnalysisRecommendationModel) tableRecommendation.getModel();
+//		analysisRequestModel.fireTableDataChanged();
+//		tableRecommendation.repaint();
+//	}
 }

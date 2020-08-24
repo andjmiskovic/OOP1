@@ -1,6 +1,7 @@
 package classes;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
 public abstract class Person {
@@ -110,6 +111,12 @@ public abstract class Person {
 		return dateOfBirth;
 	}
 
+	public int getAge() {
+		if (dateOfBirth != null)
+			return Period.between(dateOfBirth, LocalDate.now()).getYears();
+		return 0;
+	}
+
 	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
@@ -129,11 +136,17 @@ public abstract class Person {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+	
+	public String localDateToString(LocalDate date) {
+		if (date!=null) 
+			return date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy."));
+		return " ";
+	}
 
 	@Override
 	public String toString() {
 		return LBO + "," + userName + "," + password + "," + name + "," + lastName + "," + phoneNumber + "," + address
-				+ "," + dateOfBirth.format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")) + "," + gender + ","
+				+ "," + localDateToString(dateOfBirth) + "," + gender + ","
 				+ String.valueOf(active);
 	}
 

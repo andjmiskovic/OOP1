@@ -120,24 +120,6 @@ public class MenuPatient extends MenuClass {
 		iconRequest.setBounds(32, 0, 50, 60);
 		panelRequest.add(iconRequest);
 
-		JPanel panelResultsAnalysis = new JPanel();
-		panelResultsAnalysis.setLayout(null);
-		panelResultsAnalysis.setBackground(Color.WHITE);
-		panelResultsAnalysis.setBounds(0, 410, 350, 60);
-		panelMenu.add(panelResultsAnalysis);
-		
-		JLabel labelResultsAnalysis = new JLabel("RESULTS ANALYSIS");
-		labelResultsAnalysis.setHorizontalAlignment(SwingConstants.LEFT);
-		labelResultsAnalysis.setForeground(new Color(6, 56, 74));
-		labelResultsAnalysis.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		labelResultsAnalysis.setBounds(120, 11, 220, 38);
-		panelResultsAnalysis.add(labelResultsAnalysis);
-
-		JLabel iconResultsAnalysis = new JLabel("");
-		iconResultsAnalysis.setIcon(new ImageIcon(MenuPatient.class.getResource("/Interfaces/resultAnalysis.jpg")));
-		iconResultsAnalysis.setBounds(32, 0, 50, 60);
-		panelResultsAnalysis.add(iconResultsAnalysis);
-
 		JPanel panelLogOut = new JPanel();
 		panelLogOut.addMouseListener(new MouseAdapter() {
 			@Override
@@ -149,7 +131,7 @@ public class MenuPatient extends MenuClass {
 		});
 		panelLogOut.setLayout(null);
 		panelLogOut.setBackground(Color.WHITE);
-		panelLogOut.setBounds(0, 470, 350, 60);
+		panelLogOut.setBounds(0, 410, 350, 60);
 		panelMenu.add(panelLogOut);
 
 		JLabel labelLogOut = new JLabel("LOG OUT");
@@ -163,11 +145,6 @@ public class MenuPatient extends MenuClass {
 		iconLogOut.setBounds(31, 0, 50, 60);
 		panelLogOut.add(iconLogOut);
 		iconLogOut.setIcon(new ImageIcon(MenuAdmin.class.getResource("/Interfaces/odjava.jpg")));
-
-//		JPanel changingPanel = new JPanel();
-//		changingPanel.setBounds(350, 0, 1150, 1000);
-//		getContentPane().add(changingPanel);
-//		changingPanel.setBackground(myBlue);
 	}
 
 }

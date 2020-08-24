@@ -22,7 +22,7 @@ public class MedicalTechnicial extends Employee{
 	public MedicalTechnicial(Employee employee, int numberOfFinishedRequests, int numberOfHouseVisits) {
 		super(employee.getLBO(), employee.getUserName(), employee.getPassword(), employee.getName(),
 				employee.getLastName(), employee.getPhoneNumber(), employee.getAddress(), employee.getDateOfBirth(), 
-				employee.getGender(), employee.isActive(), employee.getCelery(), employee.getBonus(), employee.getYearsOfService(),
+				employee.getGender(), employee.isActive(), employee.getSalary(), employee.getBonus(), employee.getYearsOfService(),
 				employee.getQualification());
 		this.numberOfFinishedRequests = numberOfFinishedRequests;
 		this.numberOfHouseVisits = numberOfHouseVisits;
@@ -59,7 +59,7 @@ public class MedicalTechnicial extends Employee{
 	public void updateInfo(Employee employee, int numberOfFinishedRequests, int numberOfHouseVisits) {
 		super.updateInfo(employee.getLBO(), employee.getUserName(), employee.getPassword(), employee.getName(),
 				employee.getLastName(), employee.getPhoneNumber(), employee.getAddress(), employee.getDateOfBirth(), 
-				employee.getGender(), employee.isActive(), employee.getCelery(), employee.getBonus(), employee.getYearsOfService(),
+				employee.getGender(), employee.isActive(), employee.getSalary(), employee.getBonus(), employee.getYearsOfService(),
 				employee.getQualification());
 		this.numberOfFinishedRequests = numberOfFinishedRequests;
 		this.numberOfHouseVisits = numberOfHouseVisits;

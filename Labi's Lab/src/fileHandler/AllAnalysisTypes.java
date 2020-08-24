@@ -41,7 +41,9 @@ public class AllAnalysisTypes {
 		String name = attributes[0].trim();
 		String description = attributes[1].trim();
 		String unit = attributes[2].trim();
-		Specialization specialization = Specialization.valueOf(attributes[3].trim());
+		String specString = attributes[3].trim().substring(0, 1).toUpperCase()
+				+ attributes[3].trim().substring(1).toLowerCase();
+		Specialization specialization = Specialization.valueOf(specString.trim());
 		double price = Double.parseDouble(attributes[4]);
 		double lowerBound = Double.parseDouble(attributes[5]);
 		double upperBound = Double.parseDouble(attributes[6]);
@@ -100,15 +102,18 @@ public class AllAnalysisTypes {
 		}
 	}
 
-	public static double getAnalysisTypePriceWithDiscount(AnalysisType analysisType, LocalDate date) {
+	public static double getAnalysisTypePriceWithDiscount(AnalysisType analysisType, LocalDate date,
+			boolean groupDiscount) {
 		double price = 0;
-		if (analysisType.getGroupDiscount() != null) {
-			LocalDate today = (new Date()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-			if (analysisType.getGroupDiscount().getEndDate().isAfter(date)
-					&& analysisType.getGroupDiscount().getDaysOfDiscount().contains(today.getDayOfWeek())) {
-				price = analysisType.getPrice() * analysisType.getGroupDiscount().getValue();
-			} else {
-				price = analysisType.getPrice();
+		if (groupDiscount) {
+			if (analysisType.getGroupDiscount() != null) {
+				LocalDate today = (new Date()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				if (analysisType.getGroupDiscount().getEndDate().isAfter(date)
+						&& analysisType.getGroupDiscount().getDaysOfDiscount().contains(today.getDayOfWeek())) {
+					price = analysisType.getPrice() * analysisType.getGroupDiscount().getValue();
+				} else {
+					price = analysisType.getPrice();
+				}
 			}
 		} else {
 			price = analysisType.getPrice();

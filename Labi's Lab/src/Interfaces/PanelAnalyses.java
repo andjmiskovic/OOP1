@@ -98,7 +98,7 @@ public class PanelAnalyses extends JPanel {
 		changingPanel.setBackground(myBlue);
 		changingPanel.setLayout(null);
 
-		JLabel labelAnalysisTypes = new JLabel("LIST OF ALL ANALYSIS TYPES");
+		JLabel labelAnalysisTypes = new JLabel("ANALYSIS TYPES");
 		labelAnalysisTypes.setForeground(Color.WHITE);
 		labelAnalysisTypes.setFont(new Font("Tahoma", Font.PLAIN, 34));
 		labelAnalysisTypes.setBounds(165, 51, 516, 59);

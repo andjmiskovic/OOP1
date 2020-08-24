@@ -100,7 +100,7 @@ public class PanelPatients extends JPanel {
 		changingPanel.setBackground(myBlue);
 		changingPanel.setLayout(null);
 
-		JLabel labelPatients = new JLabel("LIST OF ALL PATIENTS");
+		JLabel labelPatients = new JLabel("PATIENTS");
 		labelPatients.setForeground(Color.WHITE);
 		labelPatients.setFont(new Font("Tahoma", Font.PLAIN, 34));
 		labelPatients.setBounds(165, 51, 516, 59);

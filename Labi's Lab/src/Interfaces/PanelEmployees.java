@@ -46,7 +46,7 @@ public class PanelEmployees extends JPanel {
 		changingPanel.setBackground(myBlue);
 		changingPanel.setLayout(null);
 
-		JLabel labelPatients = new JLabel("LIST OF ALL EMPLOYEES");
+		JLabel labelPatients = new JLabel("EMPLOYEES");
 		labelPatients.setForeground(Color.WHITE);
 		labelPatients.setFont(new Font("Tahoma", Font.PLAIN, 34));
 		labelPatients.setBounds(165, 51, 516, 59);

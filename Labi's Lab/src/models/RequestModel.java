@@ -50,7 +50,7 @@ public class RequestModel extends AbstractTableModel {
 			return request.getCurrentState().getName();
 		case 4:
 			if (request.getMedicalTechnicial() != null)
-				return request.getMedicalTechnicial().getName() + request.getMedicalTechnicial().getLastName();
+				return request.getMedicalTechnicial().getLastName() + " " + request.getMedicalTechnicial().getName();
 			return " ";
 		case 5:
 			return request.getTotalPrice();

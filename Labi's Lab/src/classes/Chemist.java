@@ -26,7 +26,7 @@ public class Chemist extends Employee {
 	public Chemist(Employee employee, ArrayList<Specialization> listOfSpecializations, int numberOfFinishedReports) {
 		super(employee.getLBO(), employee.getUserName(), employee.getPassword(), employee.getName(),
 				employee.getLastName(), employee.getPhoneNumber(), employee.getAddress(), employee.getDateOfBirth(),
-				employee.getGender(), employee.isActive(), employee.getCelery(), employee.getBonus(),
+				employee.getGender(), employee.isActive(), employee.getSalary(), employee.getBonus(),
 				employee.getYearsOfService(), employee.getQualification());
 		this.listOfSpecializations = listOfSpecializations;
 		this.setNumberOfFinishedReports(numberOfFinishedReports);
