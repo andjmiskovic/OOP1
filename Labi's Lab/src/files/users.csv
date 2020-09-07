@@ -1,0 +1,19 @@
+patient,00000097986,mm,m,m,m,7785865653453,m,26.08.1899.,male,true
+patient,00700097986,nPatient,n,n,m,7785865653453,xxx,26.08.1899.,male,true
+patient,18092739812,nina,nina1234,nikolina,aleksic,01923812,NS1213,22.08.2020.,female,true
+patient,12121312341,ema,emilija1234,emilija,ristic,10293291,NS12,12.12.2000.,female,true
+patient,12345678910,fifi,stefke1234,Stefan,Ostojic,37567575,Danila Kisa 9,11.08.2020.,male,true
+patient,00000000009,p,p,pera,peric,65355643,k0,11.06.2000.,male,true
+patient,28397523895,miki,miki1234,milan,ajder,12893712,FutoskaBB,07.08.2020.,male,true
+patient,24792837427,bubili,bubili1234,zoran,bukorac,982137128,SM,23.08.2000.,male,true
+patient,12121312341,ema,emilija123,emilija,ristic,10293291,NS12,12.12.2000.,female,true
+patient,12938712487,newPatient9,,peric,pera,,, ,,false
+patient,39462938473,maja,maja1234,Maja,Miskovic,023974389937493,Poparski out 60,01.03.2000.,female,true
+admin,12312312312,a,a,Ana,Andjelic,1,Novo Naselje BB,12.12.2000.,male,true,2.0
+admin,09090909099,admin,admin1234,mile,milic,9867678676,xxx,01.03.2000.,male,true,0.0
+technicial,09090909099,m,med,medic,meda,,Futoska 9,01.03.2000.,male,true,2.0,One
+technicial,09090999099,t,t,t,t,,Sarajevska 11,01.03.2000.,male,true,6.0,One
+technicial,10938210371,med,medical123,m,m,089898989,Bulevar Oslobodjenja 14,12.11.1998.,male,true,0.0,One
+chemist,09347289472,c,c,Jovan,Daskovic,28947234,xxx,01.08.2020.,male,true,0.0,One,ALERGOLOGY|BIOCHEMISTRY|DRUGS|GENETICS|HEMATOLOGY|IMMUNOCHEMISTRY|MICROBIOLOGY
+chemist,11347289472,chemist,c,Uros,Godjevac,23874623,xxx,01.08.2020.,male,true,6.0,One,ALERGOLOGY|BIOCHEMISTRY|IMMUNOCHEMISTRY|MICROBIOLOGY
+chemist,09809809889,andj,c,Andjela,Miskovic,234234,Cara Lazara 3,01.08.2020.,male,true,6.0,One,ALERGOLOGY|BIOCHEMISTRY|IMMUNOCHEMISTRY

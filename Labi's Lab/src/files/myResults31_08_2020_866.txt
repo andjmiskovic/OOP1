@@ -1,0 +1,20 @@
+Analysis Results for patient pera peric
+Address: k0
+LBO: 00000000009
+Requested date: 31.08.2020.
+Processed date: still processing
+
+Analysis data:
+
+mites allergy: are you allergic to mites?
+Lower Bound: 0.0	Upper Bound: 1.0	Measured Value: null 0/1
+
+hemoglobin HGB: carries oxygen through the body
+Lower Bound: 130.0	Upper Bound: 180.0	Measured Value: null g/l
+
+vitamin b2: important for cell growth
+Lower Bound: 2.8	Upper Bound: 20.0	Measured Value: null ug/l
+
+
+Thank you for trusting us.
+Labi's Lab, 31.08.2020.

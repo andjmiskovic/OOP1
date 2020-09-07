@@ -1,0 +1,16 @@
+233,3750.0,false, ,false, ,PROCESS_STARTED,vitamin b2:null|vitamin a:null|uric acid:null,ema,20.08.2020., , , ,IMMUNOCHEMISTRY|BIOCHEMISTRY
+504,5550.0,false, ,false, ,PROCESS_STARTED,gluten:null|uric acid:null|calcium:null,ema,24.08.2020., , , ,BIOCHEMISTRY|ALERGOLOGY
+760,8040.0,true,27.08.2020.,true,09:58,PROCESSING,cacao:null|gluten:null|bee:null|LDL cholesterol:null|proteins:null,ema,27.07.2020., ,t, ,ALERGOLOGY|BIOCHEMISTRY
+141,7290.0,false, ,false, ,PROCESS_STARTED,covid-19 test:null|uric acid:null|LDL cholesterol:null,fifi,27.08.2020., , , ,BIOCHEMISTRY
+224,2080.0,true,27.08.2020.,false, ,PROCESS_STARTED,vitamin b2:null|erythrocytes RBC:null,bubili,27.08.2020., , , ,HEMATOLOGY|IMMUNOCHEMISTRY
+121,1560.0,false, ,false, ,PROCESS_STARTED,erythrocyte sedimentation:null|glucose:null|LDL cholesterol:null|proteins:null,nina,17.08.2020., , , ,BIOCHEMISTRY|HEMATOLOGY
+257,5900.0,false, ,false, ,PROCESS_STARTED,mites allergy:null|cacao:null|glucose:null|calcium:null,nina,27.07.2020., , , ,ALERGOLOGY|BIOCHEMISTRY
+915,2410.0,false, ,false, ,PROCESS_STARTED,erythrocyte sedimentation:null|penicilin:null|calcium:null,miki,12.08.2020., , , ,DRUGS|BIOCHEMISTRY|HEMATOLOGY
+3,7670.0,false, ,false, ,SAMPLE_TAKING,HDL cholesterol:null|covid-19 test:null|glucose:null|penicilin:null|LDL cholesterol:null,maja,22.08.2020., ,m, ,BIOCHEMISTRY|DRUGS
+552,7719.0,true,27.08.2020.,false, ,PROCESSING,vitamin c:2.24|vitamin b2:11.54|vitamin a:38.68|vitamin k:3.34|vitamin d:4.44|vitamin b6:13.67,miki,20.08.2020.,27.08.2020.,m,IMMUNOCHEMISTRY:c, 
+788,3540.0,true,27.08.2020.,false, ,SAMPLE_TAKING,vitamin c:1.39|hemoglobin HGB:192.44|vitamin b2:5.46|vitamin k:8.53,bubili,24.08.2020.,27.08.2020.,m,IMMUNOCHEMISTRY:c|HEMATOLOGY:c, 
+926,3590.0,false, ,false, ,PROCESSING,hemoglobin HGB:182.57|vitamin b2:15.15|vitamin a:44.47|vitamin k:5.06|uric acid:3.4,bubili,27.08.2020.,27.08.2020.,m,IMMUNOCHEMISTRY:c|BIOCHEMISTRY:c|HEMATOLOGY:c, 
+866,9470.0,true,31.08.2020.,false, ,PROCESS_STARTED,hemoglobin HGB:null|vitamin b2:null|mites allergy:null,p,31.08.2020., , , ,ALERGOLOGY|HEMATOLOGY|IMMUNOCHEMISTRY
+941,11150.0,true,27.08.2020.,false, ,FINISHED_REPORT,covid-19 test:0.03|mites allergy:0.62|cacao:0.58|uric acid:1.16|glucose:3.15,fifi,13.08.2020.,31.08.2020.,t,ALERGOLOGY:c|BIOCHEMISTRY:c, 
+901,9520.0,true,02.09.2020.,true,12:12,PROCESS_STARTED,vitamin a:null|mites allergy:null|erythrocytes RBC:null|LDL cholesterol:null,p,01.09.2020., , , ,BIOCHEMISTRY|HEMATOLOGY|ALERGOLOGY|IMMUNOCHEMISTRY
+135,2100.0,false, ,false, ,FINISHED_REPORT,glucose:3.28|calcium:29.19,nina,27.07.2020.,07.09.2020.,m,BIOCHEMISTRY:c, 
